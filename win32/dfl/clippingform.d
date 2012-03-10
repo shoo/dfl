@@ -100,6 +100,13 @@ public:
 	
 	
 	/// ditto
+	void add(Rect rc)
+	{
+		add(RECT(rc.x, rc.y, rc.right, rc.bottom));
+	}
+	
+	
+	/// ditto
 	void add(int l, int t, int r, int b)
 	{
 		add(RECT(l, t, r, b));
@@ -107,7 +114,16 @@ public:
 	
 	
 	/// ditto
-	void opCatAssign(RECT rc)
+	void opOpAssign(string op)(RECT rc)
+		if (op == "~")
+	{
+		add(rc);
+	}
+	
+	
+	/// ditto
+	void opOpAssign(string op)(Rect rc)
+		if (op == "~")
 	{
 		add(rc);
 	}

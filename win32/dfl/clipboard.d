@@ -116,13 +116,13 @@ class Clipboard // docmain
 	
 	
 	///
-	void setString(Dstring str, bool persist = false)
+	void setString(string str, bool persist = false)
 	{
 		setDataObject(Data(str), persist);
 	}
 	
 	/// ditto
-	Dstring getString()
+	string getString()
 	{
 		dfl.data.IDataObject ido;
 		ido = getDataObject();

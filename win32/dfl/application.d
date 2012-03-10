@@ -11,6 +11,7 @@ private import dfl.base, dfl.form, dfl.internal.winapi, dfl.event;
 private import dfl.control, dfl.drawing, dfl.label;
 private import dfl.button, dfl.textbox, dfl.internal.wincom, dfl.environment;
 private import dfl.internal.utf;
+private import std.utf;
 
 version(DFL_NO_RESOURCES)
 {
@@ -176,7 +177,7 @@ final class Application // docmain
 	// Does nothing if not supported.
 	void enableVisualStyles()
 	{
-		const Dstring MANIFEST = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` "\r\n"
+		enum MANIFEST = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` "\r\n"
 			`<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">` "\r\n"
 				`<description>DFL manifest</description>` "\r\n"
 				`<dependency>` "\r\n"
@@ -295,21 +296,21 @@ final class Application // docmain
 	
 	
 	/// Path of the executable including its file name.
-	@property Dstring executablePath() // getter
+	@property string executablePath() // getter
 	{
 		return dfl.internal.utf.getModuleFileName(HMODULE.init);
 	}
 	
 	
 	/// Directory containing the executable.
-	@property Dstring startupPath() // getter
+	@property string startupPath() // getter
 	{
 		return pathGetDirName(dfl.internal.utf.getModuleFileName(HMODULE.init));
 	}
 	
 	
 	// Used internally.
-	Dstring getSpecialPath(Dstring name) // package
+	string getSpecialPath(string name) // package
 	{
 		HKEY hk;
 		if(ERROR_SUCCESS != RegOpenKeyA(HKEY_CURRENT_USER,
@@ -320,7 +321,7 @@ final class Application // docmain
 		}
 		scope(exit)
 			RegCloseKey(hk);
-		Dstring result;
+		string result;
 		result = regQueryValueString(hk, name);
 		if(!result.length)
 			goto bad_path;
@@ -329,7 +330,7 @@ final class Application // docmain
 	
 	
 	/// Application data base directory path, usually `C:\Documents and Settings\<user>\Application Data`; this directory might not exist yet.
-	@property Dstring userAppDataBasePath() // getter
+	@property string userAppDataBasePath() // getter
 	{
 		return getSpecialPath("AppData");
 	}
@@ -668,7 +669,7 @@ final class Application // docmain
 		}
 		
 		
-		this(Dstring errmsg)
+		this(string errmsg)
 		{
 			text = "Error";
 			clientSize = Size(340, 150);
@@ -677,6 +678,36 @@ final class Application // docmain
 			minimizeBox = false;
 			maximizeBox = false;
 			controlBox = false;
+			
+			string dec(string s, ref dchar dc)
+			{
+				try
+				{
+					size_t sz;
+					dc = decode(s, sz);
+					return s[sz..$];
+				}
+				catch (Throwable e)
+				{
+					dc = '\uA125';
+				}
+				return s[1..$];
+			}
+			dchar dc;
+			dchar[] msg;
+			while (errmsg.length)
+			{
+				errmsg = dec(errmsg, dc);
+				if (dc == '\n' && errmsg.length && errmsg[0] != '\r')
+				{
+					msg ~= "\r\n";
+				}
+				else
+				{
+					msg ~= dc;
+				}
+			}
+			errmsg = toUTF8(msg);
 			
 			Label label;
 			with(label = new Label)
@@ -822,7 +853,7 @@ final class Application // docmain
 		}
 		
 		
-		override Dstring toString()
+		override string toString()
 		{
 			return errBox.text;
 		}
@@ -954,7 +985,7 @@ final class Application // docmain
 	}
 	else
 	{
-		package const Dstring ZOMBIE_PROP = "DFL_Zombie";
+		package enum ZOMBIE_PROP = "DFL_Zombie";
 		
 		// Doesn't do any good since the child controls still reference this control.
 		package void zombieHwnd(Control c)
@@ -1519,7 +1550,7 @@ debug(SHOW_MESSAGE_INFO)
 	
 	void showMessageInfo(ref Message m)
 	{
-		void writeWm(Dstring wmName)
+		void writeWm(string wmName)
 		{
 			writef("Message %s=%d(0x%X)\n", wmName, m.msg, m.msg);
 		}
@@ -1937,20 +1968,20 @@ SetThemeAppPropertiesProc setThemeAppProperties;
 +/
 
 
-const Dstring CONTROL_CLASSNAME = "DFL_Control";
-const Dstring FORM_CLASSNAME = "DFL_Form";
-const Dstring TEXTBOX_CLASSNAME = "DFL_TextBox";
-const Dstring LISTBOX_CLASSNAME = "DFL_ListBox";
-//const Dstring LABEL_CLASSNAME = "DFL_Label";
-const Dstring BUTTON_CLASSNAME = "DFL_Button";
-const Dstring MDICLIENT_CLASSNAME = "DFL_MdiClient";
-const Dstring RICHTEXTBOX_CLASSNAME = "DFL_RichTextBox";
-const Dstring COMBOBOX_CLASSNAME = "DFL_ComboBox";
-const Dstring TREEVIEW_CLASSNAME = "DFL_TreeView";
-const Dstring TABCONTROL_CLASSNAME = "DFL_TabControl";
-const Dstring LISTVIEW_CLASSNAME = "DFL_ListView";
-const Dstring STATUSBAR_CLASSNAME = "DFL_StatusBar";
-const Dstring PROGRESSBAR_CLASSNAME = "DFL_ProgressBar";
+enum CONTROL_CLASSNAME = "DFL_Control";
+enum FORM_CLASSNAME = "DFL_Form";
+enum TEXTBOX_CLASSNAME = "DFL_TextBox";
+enum LISTBOX_CLASSNAME = "DFL_ListBox";
+//enum LABEL_CLASSNAME = "DFL_Label";
+enum BUTTON_CLASSNAME = "DFL_Button";
+enum MDICLIENT_CLASSNAME = "DFL_MdiClient";
+enum RICHTEXTBOX_CLASSNAME = "DFL_RichTextBox";
+enum COMBOBOX_CLASSNAME = "DFL_ComboBox";
+enum TREEVIEW_CLASSNAME = "DFL_TreeView";
+enum TABCONTROL_CLASSNAME = "DFL_TabControl";
+enum LISTVIEW_CLASSNAME = "DFL_ListView";
+enum STATUSBAR_CLASSNAME = "DFL_StatusBar";
+enum PROGRESSBAR_CLASSNAME = "DFL_ProgressBar";
 
 WNDPROC textBoxPrevWndProc;
 WNDPROC listboxPrevWndProc;
@@ -2118,7 +2149,7 @@ static ~this()
 }
 
 
-void _unableToInit(Dstring what)
+void _unableToInit(string what)
 {
 	/+if(what.length > 4
 		&& what[0] == 'D' && what[1] == 'F'
@@ -2242,7 +2273,7 @@ extern(Windows)
 					throw new DflException("Unable to load 'riched20.dll'");
 			}
 			
-			Dstring classname;
+			string classname;
 			if(dfl.internal.utf.useUnicode)
 				classname = "RichEdit20W";
 			else
@@ -2346,7 +2377,7 @@ extern(Windows)
 }
 
 
-WNDPROC _superClass(HINSTANCE hinst, Dstring className, Dstring newClassName, out WNDCLASSA getInfo) // deprecated
+WNDPROC _superClass(HINSTANCE hinst, string className, string newClassName, out WNDCLASSA getInfo) // deprecated
 {
 	WNDPROC wndProc;
 	
@@ -2372,13 +2403,13 @@ public:
 
 // Returns the old wndProc.
 // This is the old, unsafe, unicode-unfriendly function for superclassing.
-deprecated WNDPROC superClass(HINSTANCE hinst, Dstring className, Dstring newClassName, out WNDCLASSA getInfo) // package
+deprecated WNDPROC superClass(HINSTANCE hinst, string className, string newClassName, out WNDCLASSA getInfo) // package
 {
 	return _superClass(hinst, className, newClassName, getInfo);
 }
 
 
-deprecated WNDPROC superClass(HINSTANCE hinst, Dstring className, Dstring newClassName) // package
+deprecated WNDPROC superClass(HINSTANCE hinst, string className, string newClassName) // package
 {
 	WNDCLASSA info;
 	return _superClass(hinst, className, newClassName, info);
@@ -2386,7 +2417,7 @@ deprecated WNDPROC superClass(HINSTANCE hinst, Dstring className, Dstring newCla
 
 
 // Returns the old wndProc.
-WNDPROC superClass(HINSTANCE hinst, Dstring className, Dstring newClassName, out dfl.internal.utf.WndClass getInfo) // package
+WNDPROC superClass(HINSTANCE hinst, string className, string newClassName, out dfl.internal.utf.WndClass getInfo) // package
 {
 	WNDPROC wndProc;
 	

@@ -18,7 +18,7 @@ private extern(Windows) void _initTabcontrol();
 class TabPage: Panel
 {
 	///
-	this(Dstring tabText)
+	this(string tabText)
 	{
 		this();
 		
@@ -45,7 +45,7 @@ class TabPage: Panel
 	}
 	
 	
-	override Dstring toString()
+	override string toString()
 	{
 		return text;
 	}
@@ -60,7 +60,7 @@ class TabPage: Panel
 	}
 
 	
-	Dequ opEquals(Dstring val)
+	Dequ opEquals(string val)
 	{
 		return text == val;
 	}
@@ -75,7 +75,7 @@ class TabPage: Panel
 	}
 
 
-	int opCmp(Dstring val)
+	int opCmp(string val)
 	{
 		return stringICmp(text, val);
 	}
@@ -84,7 +84,7 @@ class TabPage: Panel
 	// imageIndex
 	
 	
-	override @property void text(Dstring newText) // setter
+	override @property void text(string newText) // setter
 	{
 		// Note: this probably causes toStringz() to be called twice,
 		// allocating 2 of the same string.
@@ -104,13 +104,13 @@ class TabPage: Panel
 	
 	
 	/+
-	final @property void toolTipText(Dstring ttt) // setter
+	final @property void toolTipText(string ttt) // setter
 	{
 		// TODO: ...
 	}
 	
 	
-	final @property Dstring toolTipText() // getter
+	final @property string toolTipText() // getter
 	{
 		// TODO: ...
 		return null;
@@ -981,7 +981,7 @@ class TabControl: TabControlBase // docmain
 	}
 	
 	
-	void updateTabText(TabPage page, Dstring newText)
+	void updateTabText(TabPage page, string newText)
 	in
 	{
 		assert(created);

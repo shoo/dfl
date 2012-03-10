@@ -63,7 +63,7 @@ class NotifyIcon // docmain
 	///
 	// Must be less than 64 chars.
 	// To-do: hold reference to setter's string, use that for getter.. ?
-	final @property void text(Dstring txt) // setter
+	final @property void text(string txt) // setter
 	{
 		if(txt.length >= nid.szTip.length)
 			throw new DflException("Notify icon text too long");
@@ -83,12 +83,12 @@ class NotifyIcon // docmain
 	}
 	
 	/// ditto
-	final @property Dstring text() // getter
+	final @property string text() // getter
 	{
 		//return nid.szTip[0 .. tipLen]; // Returning possibly mutated text!
 		//return nid.szTip[0 .. tipLen].dup;
 		//return nid.szTip[0 .. tipLen].idup; // Needed in D2. Doesn't work in D1.
-		return cast(Dstring)nid.szTip[0 .. tipLen].dup; // Needed in D2. Doesn't work in D1.
+		return cast(string)nid.szTip[0 .. tipLen].dup; // Needed in D2. Doesn't work in D1.
 	}
 	
 	

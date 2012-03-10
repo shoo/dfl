@@ -160,9 +160,9 @@ class ToolTip // docmain
 	
 	///
 	// WARNING: possible buffer overflow.
-	final Dstring getToolTip(Control ctrl)
+	final string getToolTip(Control ctrl)
 	{
-		Dstring result;
+		string result;
 		TOOLINFOA tool;
 		tool.cbSize = TOOLINFOA.sizeof;
 		tool.uFlags = TTF_IDISHWND;
@@ -201,7 +201,7 @@ class ToolTip // docmain
 	}
 	
 	/// ditto
-	final void setToolTip(Control ctrl, Dstring text)
+	final void setToolTip(Control ctrl, string text)
 	in
 	{
 		try
@@ -285,7 +285,7 @@ class ToolTip // docmain
 	
 	
 	private:
-	const Dstring _TOOLTIPS_CLASSA = "tooltips_class32";
+	const string _TOOLTIPS_CLASSA = "tooltips_class32";
 	const size_t MAX_TIP_TEXT_LENGTH = 2045;
 	
 	HWND hwtt; // Tooltip control handle.

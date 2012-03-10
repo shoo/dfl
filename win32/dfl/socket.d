@@ -427,7 +427,7 @@ class AsyncSocket: DflSocket // docmain
 		}
 		
 		/// ditto
-		this(AddressFamily af, SocketType type, Dstring protocolName)
+		this(AddressFamily af, SocketType type, string protocolName)
 		{
 			super(af, type, protocolName);
 			super.blocking = false;
@@ -693,7 +693,7 @@ class GetHost // docmain
 
 
 ///
-GetHost asyncGetHostByName(Dstring name, GetHostCallback callback) // docmain
+GetHost asyncGetHostByName(string name, GetHostCallback callback) // docmain
 {
 	if(!hwNet)
 		_init();
@@ -741,7 +741,7 @@ GetHost asyncGetHostByAddr(uint32_t addr, GetHostCallback callback) // docmain
 
 /// ditto
 // Shortcut.
-GetHost asyncGetHostByAddr(Dstring addr, GetHostCallback callback) // docmain
+GetHost asyncGetHostByAddr(string addr, GetHostCallback callback) // docmain
 {
 	uint uiaddr;
 	uiaddr = DInternetAddress.parse(addr);
@@ -783,9 +783,9 @@ class SocketQueue // docmain
 	
 	/+
 	// DMD 0.92 says error: function toString overrides but is not covariant with toString
-	override Dstring toString()
+	override string toString()
 	{
-		return cast(Dstring)peek();
+		return cast(string)peek();
 	}
 	+/
 	
@@ -1002,7 +1002,7 @@ struct EventInfo
 
 const UINT WM_DFL_NETEVENT = WM_USER + 104;
 const UINT WM_DFL_HOSTEVENT = WM_USER + 105;
-const Dstring NETEVENT_CLASSNAME = "DFL_NetEvent";
+const string NETEVENT_CLASSNAME = "DFL_NetEvent";
 
 EventInfo[socket_t] allEvents;
 GetHost[HANDLE] allGetHosts;

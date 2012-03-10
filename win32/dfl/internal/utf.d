@@ -197,10 +197,10 @@ template _getlen(T)
 
 public:
 
-Dstringz unsafeStringz(Dstring s)
+immutable(char)* unsafeStringz(string s)
 {
 	if(!s.length)
-		return "";
+		return ""c.ptr;
 	
 	// Check if already null terminated.
 	if(!s.ptr[s.length]) // Disables bounds checking.
@@ -212,11 +212,11 @@ Dstringz unsafeStringz(Dstring s)
 	result[0 .. s.length] = s;
 	result[s.length] = 0;
 	//return result.ptr;
-	return cast(Dstringz)result.ptr; // Needed in D2.
+	return cast(typeof(return))result.ptr; // Needed in D2.
 }
 
 
-Dstring unicodeToAnsi(Dwstringz unicode, size_t ulen)
+string unicodeToAnsi(in wchar* unicode, size_t ulen)
 {
 	if(!ulen)
 		return null;
@@ -232,11 +232,11 @@ Dstring unicodeToAnsi(Dwstringz unicode, size_t ulen)
 	len = WideCharToMultiByte(0, 0, unicode, ulen, result.ptr, len, null, null);
 	assert(len == result.length);
 	//return result[0 .. len - 1];
-	return cast(Dstring)result[0 .. len - 1]; // Needed in D2.
+	return cast(string)result[0 .. len - 1]; // Needed in D2.
 }
 
 
-Dwstring ansiToUnicode(Dstringz ansi, size_t len)
+wstring ansiToUnicode(in char* ansi, size_t len)
 {
 	wchar[] ws;
 	
@@ -248,25 +248,16 @@ Dwstring ansiToUnicode(Dstringz ansi, size_t len)
 	ws = ws[0 .. len - 1]; // Exclude null char at end.
 	
 	//return ws;
-	return cast(Dwstring)ws; // Needed in D2.
+	return cast(wstring)ws; // Needed in D2.
 }
 
 
-Dstring fromAnsi(Dstringz ansi, size_t len)
+string fromAnsi(in char* ansi, size_t len)
 {
 	return utf16stringtoUtf8string(ansiToUnicode(ansi, len));
 }
 
-version(DFL_D2_AND_ABOVE)
-{
-	Dstring fromAnsi(char* ansi, size_t len)
-	{
-		return fromAnsi(cast(Dstringz)ansi, len);
-	}
-}
-
-
-Dstring fromAnsiz(Dstringz ansiz)
+string fromAnsiz(in char* ansiz)
 {
 	if(!ansiz)
 		return null;
@@ -275,16 +266,7 @@ Dstring fromAnsiz(Dstringz ansiz)
 	return fromAnsi(ansiz, _getlen(ansiz));
 }
 
-version(DFL_D2_AND_ABOVE)
-{
-	Dstring fromAnsiz(char* ansi)
-	{
-		return fromAnsiz(cast(Dstringz)ansi);
-	}
-}
-
-
-private Dstring _toAnsiz(Dstring utf8, bool safe = true)
+private string _toAnsiz(string utf8, bool safe = true)
 {
 	// This function is intentionally unsafe; depends on "safe" param.
 	foreach(char ch; utf8)
@@ -300,19 +282,19 @@ private Dstring _toAnsiz(Dstring utf8, bool safe = true)
 			len = WideCharToMultiByte(0, 0, wsz, -1, result.ptr, len, null, null);
 			assert(len == result.length);
 			//return result[0 .. len - 1];
-			return cast(Dstring)result[0 .. len - 1]; // Needed in D2.
+			return cast(string)result[0 .. len - 1]; // Needed in D2.
 		}
 	}
 	
 	// Don't need conversion.
 	if(safe)
 		//return stringToStringz(utf8)[0 .. utf8.length];
-		return cast(Dstring)stringToStringz(utf8)[0 .. utf8.length]; // Needed in D2.
+		return cast(string)stringToStringz(utf8)[0 .. utf8.length]; // Needed in D2.
 	return unsafeStringz(utf8)[0 .. utf8.length];
 }
 
 
-private size_t toAnsiLength(Dstring utf8)
+private size_t toAnsiLength(string utf8)
 {
 	foreach(char ch; utf8)
 	{
@@ -328,51 +310,43 @@ private size_t toAnsiLength(Dstring utf8)
 }
 
 
-private Dstring _unsafeAnsiz(Dstring utf8)
+private string _unsafeAnsiz(string utf8)
 {
 	return _toAnsiz(utf8, false);
 }
 
 
-Dstringz toAnsiz(Dstring utf8, bool safe = true)
+immutable(char)* toAnsiz(string utf8, bool safe = true)
 {
 	return _toAnsiz(utf8, safe).ptr;
 }
 
 
-Dstringz unsafeAnsiz(Dstring utf8)
+immutable(char)* unsafeAnsiz(string utf8)
 {
 	return _toAnsiz(utf8, false).ptr;
 }
 
 
-Dstring toAnsi(Dstring utf8, bool safe = true)
+string toAnsi(string utf8, bool safe = true)
 {
 	return _toAnsiz(utf8, safe);
 }
 
 
-Dstring unsafeAnsi(Dstring utf8)
+string unsafeAnsi(string utf8)
 {
 	return _toAnsiz(utf8, false);
 }
 
 
-Dstring fromUnicode(Dwstringz unicode, size_t len)
+string fromUnicode(in wchar* unicode, size_t len)
 {
 	return utf16stringtoUtf8string(unicode[0 .. len]);
 }
 
-version(DFL_D2_AND_ABOVE)
-{
-	Dstring fromUnicode(wchar* unicode, size_t len)
-	{
-		return fromUnicode(cast(Dwstringz)unicode, len);
-	}
-}
 
-
-Dstring fromUnicodez(Dwstringz unicodez)
+string fromUnicodez(in wchar* unicodez)
 {
 	if(!unicodez)
 		return null;
@@ -381,29 +355,21 @@ Dstring fromUnicodez(Dwstringz unicodez)
 	return fromUnicode(unicodez, _getlen(unicodez));
 }
 
-version(DFL_D2_AND_ABOVE)
-{
-	Dstring fromUnicodez(wchar* unicodez)
-	{
-		return fromUnicodez(cast(Dwstringz)unicodez);
-	}
-}
 
-
-Dwstringz toUnicodez(Dstring utf8)
+immutable(wchar)* toUnicodez(string utf8)
 {
 	//return utf8stringToUtf16stringz(utf8);
-	return cast(Dwstringz)utf8stringToUtf16stringz(utf8); // Needed in D2.
+	return cast(typeof(return))utf8stringToUtf16stringz(utf8); // Needed in D2.
 }
 
 
-Dwstring toUnicode(Dstring utf8)
+wstring toUnicode(string utf8)
 {
 	return utf8stringtoUtf16string(utf8);
 }
 
 
-size_t toUnicodeLength(Dstring utf8)
+size_t toUnicodeLength(string utf8)
 {
 	size_t result = 0;
 	foreach(wchar wch; utf8)
@@ -476,9 +442,9 @@ extern(Windows)
 }
 
 
-private void getProcErr(Dstring procName)
+private void getProcErr(string procName)
 {
-	Dstring errdesc;
+	string errdesc;
 	version(DFL_NO_PROC_ERROR_INFO)
 	{
 	}
@@ -493,7 +459,7 @@ private void getProcErr(Dstring procName)
 
 
 // If loading from a resource just use LoadImageA().
-HANDLE loadImage(HINSTANCE hinst, Dstring name, UINT uType, int cxDesired, int cyDesired, UINT fuLoa)
+HANDLE loadImage(HINSTANCE hinst, string name, UINT uType, int cxDesired, int cyDesired, UINT fuLoa)
 {
 	if(useUnicode)
 	{
@@ -503,7 +469,7 @@ HANDLE loadImage(HINSTANCE hinst, Dstring name, UINT uType, int cxDesired, int c
 		}
 		else
 		{
-			const Dstring NAME = "LoadImageW";
+			const string NAME = "LoadImageW";
 			static LoadImageWProc proc = null;
 			
 			if(!proc)
@@ -523,7 +489,7 @@ HANDLE loadImage(HINSTANCE hinst, Dstring name, UINT uType, int cxDesired, int c
 }
 
 
-HWND createWindowEx(DWORD dwExStyle, Dstring className, Dstring windowName, DWORD dwStyle,
+HWND createWindowEx(DWORD dwExStyle, string className, string windowName, DWORD dwStyle,
 	int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance,
 	LPVOID lpParam)
 {
@@ -535,7 +501,7 @@ HWND createWindowEx(DWORD dwExStyle, Dstring className, Dstring windowName, DWOR
 		}
 		else
 		{
-			const Dstring NAME = "CreateWindowExW";
+			const string NAME = "CreateWindowExW";
 			static CreateWindowExWProc proc = null;
 			
 			if(!proc)
@@ -559,7 +525,7 @@ HWND createWindowEx(DWORD dwExStyle, Dstring className, Dstring windowName, DWOR
 }
 
 
-HWND createWindow(Dstring className, Dstring windowName, DWORD dwStyle, int x, int y,
+HWND createWindow(string className, string windowName, DWORD dwStyle, int x, int y,
 	int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HANDLE hInstance, LPVOID lpParam)
 {
 	return createWindowEx(0, className, windowName, dwStyle, x, y,
@@ -567,7 +533,7 @@ HWND createWindow(Dstring className, Dstring windowName, DWORD dwStyle, int x, i
 }
 
 
-Dstring getWindowText(HWND hwnd)
+string getWindowText(HWND hwnd)
 {
 	if(useUnicode)
 	{
@@ -578,10 +544,10 @@ Dstring getWindowText(HWND hwnd)
 		}
 		else
 		{
-			const Dstring NAME = "GetWindowTextW";
+			const string NAME = "GetWindowTextW";
 			static GetWindowTextWProc proc = null;
 			
-			const Dstring NAMELEN = "GetWindowTextLengthW";
+			const string NAMELEN = "GetWindowTextLengthW";
 			static GetWindowTextLengthWProc proclen = null;
 			
 			if(!proc)
@@ -628,7 +594,7 @@ Dstring getWindowText(HWND hwnd)
 }
 
 
-BOOL setWindowText(HWND hwnd, Dstring str)
+BOOL setWindowText(HWND hwnd, string str)
 {
 	if(useUnicode)
 	{
@@ -638,7 +604,7 @@ BOOL setWindowText(HWND hwnd, Dstring str)
 		}
 		else
 		{
-			const Dstring NAME = "SetWindowTextW";
+			const string NAME = "SetWindowTextW";
 			static SetWindowTextWProc proc = null;
 			
 			if(!proc)
@@ -658,7 +624,7 @@ BOOL setWindowText(HWND hwnd, Dstring str)
 }
 
 
-Dstring getModuleFileName(HMODULE hmod)
+string getModuleFileName(HMODULE hmod)
 {
 	if(useUnicode)
 	{
@@ -668,7 +634,7 @@ Dstring getModuleFileName(HMODULE hmod)
 		}
 		else
 		{
-			const Dstring NAME = "GetModuleFileNameW";
+			const string NAME = "GetModuleFileNameW";
 			static GetModuleFileNameWProc proc = null;
 			
 			if(!proc)
@@ -715,7 +681,7 @@ else
 	{
 		private SendMessageWProc _loadSendMessageW()
 		{
-			const Dstring NAME = "SendMessageW";
+			const string NAME = "SendMessageW";
 			static SendMessageWProc proc = null;
 			
 			if(!proc)
@@ -732,7 +698,7 @@ else
 
 
 // Sends EM_GETSELTEXT to a rich text box and returns the text.
-Dstring emGetSelText(HWND hwnd, size_t selTextLength)
+string emGetSelText(HWND hwnd, size_t selTextLength)
 {
 	if(useUnicode)
 	{
@@ -765,7 +731,7 @@ Dstring emGetSelText(HWND hwnd, size_t selTextLength)
 
 // Gets the selected text of an edit box.
 // This needs to retrieve the entire text and strip out the extra.
-Dstring getSelectedText(HWND hwnd)
+string getSelectedText(HWND hwnd)
 {
 	uint v1, v2;
 	uint len;
@@ -851,8 +817,8 @@ void emSetPasswordChar(HWND hwnd, dchar pwc)
 	}
 	else
 	{
-		Dstring chs;
-		Dstring ansichs;
+		string chs;
+		string ansichs;
 		chs = utf32stringtoUtf8string((&pwc)[0 .. 1]);
 		ansichs = unsafeAnsi(chs);
 		
@@ -883,8 +849,8 @@ dchar emGetPasswordChar(HWND hwnd)
 	else
 	{
 		char ansich;
-		Dstring chs;
-		Ddstring dchs;
+		string chs;
+		dstring dchs;
 		ansich = cast(char)SendMessageA(hwnd, EM_GETPASSWORDCHAR, 0, 0);
 		//chs = fromAnsi((&ansich)[0 .. 1], 1);
 		chs = fromAnsi(&ansich, 1);
@@ -919,7 +885,7 @@ LRESULT sendMessage(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 }
 
 
-LRESULT sendMessage(HWND hwnd, UINT msg, WPARAM wparam, Dstring lparam, bool safe = true)
+LRESULT sendMessage(HWND hwnd, UINT msg, WPARAM wparam, string lparam, bool safe = true)
 {
 	if(useUnicode)
 	{
@@ -942,7 +908,7 @@ LRESULT sendMessage(HWND hwnd, UINT msg, WPARAM wparam, Dstring lparam, bool saf
 }
 
 
-LRESULT sendMessageUnsafe(HWND hwnd, UINT msg, WPARAM wparam, Dstring lparam)
+LRESULT sendMessageUnsafe(HWND hwnd, UINT msg, WPARAM wparam, string lparam)
 {
 	return sendMessage(hwnd, msg, wparam, lparam, false);
 }
@@ -961,7 +927,7 @@ LRESULT callWindowProc(WNDPROC lpPrevWndFunc, HWND hwnd, UINT msg, WPARAM wparam
 		}
 		else
 		{
-			const Dstring NAME = "CallWindowProcW";
+			const string NAME = "CallWindowProcW";
 			static CallWindowProcWProc proc = null;
 			
 			if(!proc)
@@ -981,7 +947,7 @@ LRESULT callWindowProc(WNDPROC lpPrevWndFunc, HWND hwnd, UINT msg, WPARAM wparam
 }
 
 
-UINT registerClipboardFormat(Dstring formatName)
+UINT registerClipboardFormat(string formatName)
 {
 	if(useUnicode)
 	{
@@ -991,7 +957,7 @@ UINT registerClipboardFormat(Dstring formatName)
 		}
 		else
 		{
-			const Dstring NAME = "RegisterClipboardFormatW";
+			const string NAME = "RegisterClipboardFormatW";
 			static RegisterClipboardFormatWProc proc = null;
 			
 			if(!proc)
@@ -1011,7 +977,7 @@ UINT registerClipboardFormat(Dstring formatName)
 }
 
 
-Dstring getClipboardFormatName(UINT format)
+string getClipboardFormatName(UINT format)
 {
 	if(useUnicode)
 	{
@@ -1021,7 +987,7 @@ Dstring getClipboardFormatName(UINT format)
 		}
 		else
 		{
-			const Dstring NAME = "GetClipboardFormatNameW";
+			const string NAME = "GetClipboardFormatNameW";
 			static GetClipboardFormatNameWProc proc = null;
 			
 			if(!proc)
@@ -1054,7 +1020,7 @@ Dstring getClipboardFormatName(UINT format)
 
 
 // On Windows 9x, the number of characters cannot exceed 8192.
-int drawTextEx(HDC hdc, Dstring text, LPRECT lprc, UINT dwDTFormat, LPDRAWTEXTPARAMS lpDTParams)
+int drawTextEx(HDC hdc, string text, LPRECT lprc, UINT dwDTFormat, LPDRAWTEXTPARAMS lpDTParams)
 {
 	// Note: an older version of MSDN says cchText should be -1 for a null terminated string,
 	// whereas the newer MSDN says 1. Lets just play it safe and use a local null terminated
@@ -1069,7 +1035,7 @@ int drawTextEx(HDC hdc, Dstring text, LPRECT lprc, UINT dwDTFormat, LPDRAWTEXTPA
 		}
 		else
 		{
-			const Dstring NAME = "DrawTextExW";
+			const string NAME = "DrawTextExW";
 			static DrawTextExWProc proc = null;
 			
 			if(!proc)
@@ -1085,7 +1051,7 @@ int drawTextEx(HDC hdc, Dstring text, LPRECT lprc, UINT dwDTFormat, LPDRAWTEXTPA
 		strz = toUnicodez(text);
 		return proc(hdc, strz, -1, lprc, dwDTFormat, lpDTParams);
 		+/
-		Dwstring str;
+		wstring str;
 		wchar[2] tempStr;
 		str = toUnicode(text);
 		if(str.length == 1)
@@ -1093,7 +1059,7 @@ int drawTextEx(HDC hdc, Dstring text, LPRECT lprc, UINT dwDTFormat, LPDRAWTEXTPA
 			tempStr[0] = str[0];
 			tempStr[1] = 0;
 			//str = tempStr[0 .. 1];
-			str = cast(Dwstring)tempStr[0 .. 1]; // Needed in D2.
+			str = cast(wstring)tempStr[0 .. 1]; // Needed in D2.
 		}
 		//return proc(hdc, str.ptr, str.length, lprc, dwDTFormat, lpDTParams);
 		return proc(hdc, cast(wchar*)str.ptr, str.length, lprc, dwDTFormat, lpDTParams); // Needed in D2.
@@ -1105,7 +1071,7 @@ int drawTextEx(HDC hdc, Dstring text, LPRECT lprc, UINT dwDTFormat, LPDRAWTEXTPA
 		strz = unsafeAnsiz(text);
 		return DrawTextExA(hdc, strz, -1, lprc, dwDTFormat, lpDTParams);
 		+/
-		Dstring str;
+		string str;
 		char[2] tempStr;
 		str = unsafeAnsi(text);
 		if(str.length == 1)
@@ -1113,7 +1079,7 @@ int drawTextEx(HDC hdc, Dstring text, LPRECT lprc, UINT dwDTFormat, LPDRAWTEXTPA
 			tempStr[0] = str[0];
 			tempStr[1] = 0;
 			//str = tempStr[0 .. 1];
-			str = cast(Dstring)tempStr[0 .. 1]; // Needed in D2.
+			str = cast(string)tempStr[0 .. 1]; // Needed in D2.
 		}
 		//return DrawTextExA(hdc, str.ptr, str.length, lprc, dwDTFormat, lpDTParams);
 		return DrawTextExA(hdc, cast(char*)str.ptr, str.length, lprc, dwDTFormat, lpDTParams); // Needed in D2.
@@ -1121,7 +1087,7 @@ int drawTextEx(HDC hdc, Dstring text, LPRECT lprc, UINT dwDTFormat, LPDRAWTEXTPA
 }
 
 
-Dstring getCommandLine()
+string getCommandLine()
 {
 	// Windows 9x supports GetCommandLineW().
 	return dfl.internal.utf.fromUnicodez(GetCommandLineW());
@@ -1141,7 +1107,7 @@ Dstring getCommandLine()
 //class CurDirLockType { }
 
 
-BOOL setCurrentDirectory(Dstring pathName)
+BOOL setCurrentDirectory(string pathName)
 {
 	//synchronized(typeid(CurDirLockType))
 	{
@@ -1153,7 +1119,7 @@ BOOL setCurrentDirectory(Dstring pathName)
 			}
 			else
 			{
-				const Dstring NAME = "SetCurrentDirectoryW";
+				const string NAME = "SetCurrentDirectoryW";
 				static SetCurrentDirectoryWProc proc = null;
 				
 				if(!proc)
@@ -1174,7 +1140,7 @@ BOOL setCurrentDirectory(Dstring pathName)
 }
 
 
-Dstring getCurrentDirectory()
+string getCurrentDirectory()
 {
 	//synchronized(typeid(CurDirLockType))
 	{
@@ -1186,7 +1152,7 @@ Dstring getCurrentDirectory()
 			}
 			else
 			{
-				const Dstring NAME = "GetCurrentDirectoryW";
+				const string NAME = "GetCurrentDirectoryW";
 				static GetCurrentDirectoryWProc proc = null;
 				
 				if(!proc)
@@ -1221,7 +1187,7 @@ Dstring getCurrentDirectory()
 }
 
 
-Dstring getFullPathName(Dstring fileName)
+string getFullPathName(string fileName)
 {
 	//synchronized(typeid(CurDirLockType))
 	{
@@ -1235,7 +1201,7 @@ Dstring getFullPathName(Dstring fileName)
 			}
 			else
 			{
-				const Dstring NAME = "GetFullPathNameW";
+				const string NAME = "GetFullPathNameW";
 				static GetFullPathNameWProc proc = null;
 				
 				if(!proc)
@@ -1276,7 +1242,7 @@ Dstring getFullPathName(Dstring fileName)
 }
 
 
-Dstring getComputerName()
+string getComputerName()
 {
 	if(useUnicode)
 	{
@@ -1286,7 +1252,7 @@ Dstring getComputerName()
 		}
 		else
 		{
-			const Dstring NAME = "GetComputerNameW";
+			const string NAME = "GetComputerNameW";
 			static GetComputerNameWProc proc = null;
 			
 			if(!proc)
@@ -1316,7 +1282,7 @@ Dstring getComputerName()
 }
 
 
-Dstring getSystemDirectory()
+string getSystemDirectory()
 {
 	if(useUnicode)
 	{
@@ -1326,7 +1292,7 @@ Dstring getSystemDirectory()
 		}
 		else
 		{
-			const Dstring NAME = "GetSystemDirectoryW";
+			const string NAME = "GetSystemDirectoryW";
 			static GetSystemDirectoryWProc proc = null;
 			
 			if(!proc)
@@ -1358,7 +1324,7 @@ Dstring getSystemDirectory()
 }
 
 
-Dstring getUserName()
+string getUserName()
 {
 	if(useUnicode)
 	{
@@ -1368,7 +1334,7 @@ Dstring getUserName()
 		}
 		else
 		{
-			const Dstring NAME = "GetUserNameW";
+			const string NAME = "GetUserNameW";
 			static GetUserNameWProc proc = null;
 			
 			if(!proc)
@@ -1397,7 +1363,7 @@ Dstring getUserName()
 
 
 // Returns 0 on failure.
-DWORD expandEnvironmentStrings(Dstring src, out Dstring result)
+DWORD expandEnvironmentStrings(string src, out string result)
 {
 	if(useUnicode)
 	{
@@ -1407,7 +1373,7 @@ DWORD expandEnvironmentStrings(Dstring src, out Dstring result)
 		}
 		else
 		{
-			const Dstring NAME = "ExpandEnvironmentStringsW";
+			const string NAME = "ExpandEnvironmentStringsW";
 			static ExpandEnvironmentStringsWProc proc = null;
 			
 			if(!proc)
@@ -1451,7 +1417,7 @@ DWORD expandEnvironmentStrings(Dstring src, out Dstring result)
 }
 
 
-Dstring getEnvironmentVariable(Dstring name)
+string getEnvironmentVariable(string name)
 {
 	if(useUnicode)
 	{
@@ -1461,7 +1427,7 @@ Dstring getEnvironmentVariable(Dstring name)
 		}
 		else
 		{
-			const Dstring NAME = "GetEnvironmentVariableW";
+			const string NAME = "GetEnvironmentVariableW";
 			static GetEnvironmentVariableWProc proc = null;
 			
 			if(!proc)
@@ -1497,7 +1463,7 @@ Dstring getEnvironmentVariable(Dstring name)
 }
 
 
-int messageBox(HWND hWnd, Dstring text, Dstring caption, UINT uType)
+int messageBox(HWND hWnd, string text, string caption, UINT uType)
 {
 	// Windows 9x supports MessageBoxW().
 	return MessageBoxW(hWnd, toUnicodez(text), toUnicodez(caption), uType);
@@ -1513,7 +1479,7 @@ struct WndClass
 	}
 	alias wcw wc;
 	
-	Dstring className;
+	string className;
 }
 
 
@@ -1527,7 +1493,7 @@ ATOM registerClass(ref WndClass wc)
 		}
 		else
 		{
-			const Dstring NAME = "RegisterClassW";
+			const string NAME = "RegisterClassW";
 			static RegisterClassWProc proc = null;
 			
 			if(!proc)
@@ -1549,7 +1515,7 @@ ATOM registerClass(ref WndClass wc)
 }
 
 
-BOOL getClassInfo(HINSTANCE hinst, Dstring className, ref WndClass wc)
+BOOL getClassInfo(HINSTANCE hinst, string className, ref WndClass wc)
 {
 	wc.className = className; // ?
 	
@@ -1561,7 +1527,7 @@ BOOL getClassInfo(HINSTANCE hinst, Dstring className, ref WndClass wc)
 		}
 		else
 		{
-			const Dstring NAME = "GetClassInfoW";
+			const string NAME = "GetClassInfoW";
 			static GetClassInfoWProc proc = null;
 			
 			if(!proc)
@@ -1582,7 +1548,7 @@ BOOL getClassInfo(HINSTANCE hinst, Dstring className, ref WndClass wc)
 
 
 // Shouldn't have been implemented this way.
-deprecated BOOL getTextExtentPoint32(HDC hdc, Dstring text, LPSIZE lpSize)
+deprecated BOOL getTextExtentPoint32(HDC hdc, string text, LPSIZE lpSize)
 {
 	if(useUnicode)
 	{
@@ -1592,7 +1558,7 @@ deprecated BOOL getTextExtentPoint32(HDC hdc, Dstring text, LPSIZE lpSize)
 		}
 		else
 		{
-			const Dstring NAME = "GetTextExtentPoint32W";
+			const string NAME = "GetTextExtentPoint32W";
 			static GetTextExtentPoint32WProc proc = null;
 			
 			if(!proc)
@@ -1603,7 +1569,7 @@ deprecated BOOL getTextExtentPoint32(HDC hdc, Dstring text, LPSIZE lpSize)
 			}
 		}
 		
-		Dwstring str;
+		wstring str;
 		str = toUnicode(text);
 		return proc(hdc, str.ptr, str.length, lpSize);
 	}
@@ -1611,14 +1577,14 @@ deprecated BOOL getTextExtentPoint32(HDC hdc, Dstring text, LPSIZE lpSize)
 	{
 		// Using GetTextExtentPoint32A here even though W is supported in order
 		// to keep the measurements accurate with DrawTextA.
-		Dstring str;
+		string str;
 		str = unsafeAnsi(text);
 		return GetTextExtentPoint32A(hdc, str.ptr, str.length, lpSize);
 	}
 }
 
 
-Dstring dragQueryFile(HDROP hDrop, UINT iFile)
+string dragQueryFile(HDROP hDrop, UINT iFile)
 {
 	if(iFile >= 0xFFFFFFFF)
 		return null;
@@ -1631,7 +1597,7 @@ Dstring dragQueryFile(HDROP hDrop, UINT iFile)
 		}
 		else
 		{
-			const Dstring NAME = "DragQueryFileW";
+			const string NAME = "DragQueryFileW";
 			static DragQueryFileWProc proc = null;
 			
 			if(!proc)
@@ -1672,7 +1638,7 @@ UINT dragQueryFile(HDROP hDrop)
 }
 
 
-HANDLE createFile(Dstring fileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+HANDLE createFile(string fileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes,
 	DWORD dwCreationDistribution, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile)
 {
 	if(useUnicode)
@@ -1701,7 +1667,7 @@ LRESULT defWindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		}
 		else
 		{
-			const Dstring NAME = "DefWindowProcW";
+			const string NAME = "DefWindowProcW";
 			static DefWindowProcWProc proc = null;
 			
 			if(!proc)
@@ -1731,7 +1697,7 @@ LRESULT defDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		}
 		else
 		{
-			const Dstring NAME = "DefDlgProcW";
+			const string NAME = "DefDlgProcW";
 			static DefDlgProcWProc proc = null;
 			
 			if(!proc)
@@ -1761,7 +1727,7 @@ LRESULT defFrameProc(HWND hwnd, HWND hwndMdiClient, UINT msg, WPARAM wparam, LPA
 		}
 		else
 		{
-			const Dstring NAME = "DefFrameProcW";
+			const string NAME = "DefFrameProcW";
 			static DefFrameProcWProc proc = null;
 			
 			if(!proc)
@@ -1791,7 +1757,7 @@ LRESULT defMDIChildProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		}
 		else
 		{
-			const Dstring NAME = "DefMDIChildProcW";
+			const string NAME = "DefMDIChildProcW";
 			static DefMDIChildProcWProc proc = null;
 			
 			if(!proc)
@@ -1825,7 +1791,7 @@ LONG dispatchMessage(MSG* pmsg)
 		}
 		else
 		{
-			const Dstring DISPATCHNAME = "DispatchMessageW";
+			const string DISPATCHNAME = "DispatchMessageW";
 			static DispatchMessageWProc dispatchproc = null;
 			
 			if(!dispatchproc)
@@ -1855,7 +1821,7 @@ BOOL peekMessage(MSG* pmsg, HWND hwnd = HWND.init, UINT wmFilterMin = 0, UINT wm
 		}
 		else
 		{
-			const Dstring PEEKNAME = "PeekMessageW";
+			const string PEEKNAME = "PeekMessageW";
 			static PeekMessageWProc peekproc = null;
 			
 			if(!peekproc)
@@ -1924,7 +1890,7 @@ BOOL isDialogMessage(HWND hwnd, MSG* pmsg)
 		}
 		else
 		{
-			const Dstring NAME = "IsDialogMessageW";
+			const string NAME = "IsDialogMessageW";
 			static IsDialogMessageWProc proc = null;
 			
 			if(!proc)
@@ -1944,7 +1910,7 @@ BOOL isDialogMessage(HWND hwnd, MSG* pmsg)
 }
 
 
-HANDLE findFirstChangeNotification(Dstring pathName, BOOL watchSubtree, DWORD notifyFilter)
+HANDLE findFirstChangeNotification(string pathName, BOOL watchSubtree, DWORD notifyFilter)
 {
 	if(useUnicode)
 	{
@@ -1954,7 +1920,7 @@ HANDLE findFirstChangeNotification(Dstring pathName, BOOL watchSubtree, DWORD no
 		}
 		else
 		{
-			const Dstring NAME = "FindFirstChangeNotificationW";
+			const string NAME = "FindFirstChangeNotificationW";
 			static FindFirstChangeNotificationWProc proc = null;
 			
 			if(!proc)
@@ -1974,7 +1940,7 @@ HANDLE findFirstChangeNotification(Dstring pathName, BOOL watchSubtree, DWORD no
 }
 
 
-HINSTANCE loadLibraryEx(Dstring libFileName, DWORD flags)
+HINSTANCE loadLibraryEx(string libFileName, DWORD flags)
 {
 	if(useUnicode)
 	{
@@ -1984,7 +1950,7 @@ HINSTANCE loadLibraryEx(Dstring libFileName, DWORD flags)
 		}
 		else
 		{
-			const Dstring NAME = "LoadLibraryExW";
+			const string NAME = "LoadLibraryExW";
 			static LoadLibraryExWProc proc = null;
 			
 			if(!proc)
@@ -2014,7 +1980,7 @@ BOOL _setMenuItemInfoW(HMENU hMenu, UINT uItem, BOOL fByPosition, LPMENUITEMINFO
 		}
 		else
 		{
-			const Dstring NAME = "SetMenuItemInfoW";
+			const string NAME = "SetMenuItemInfoW";
 			static SetMenuItemInfoWProc proc = null;
 			
 			if(!proc)
@@ -2044,7 +2010,7 @@ BOOL _insertMenuItemW(HMENU hMenu, UINT uItem, BOOL fByPosition, LPMENUITEMINFOW
 		}
 		else
 		{
-			const Dstring NAME = "InsertMenuItemW";
+			const string NAME = "InsertMenuItemW";
 			static InsertMenuItemWProc proc = null;
 			
 			if(!proc)
@@ -2064,7 +2030,7 @@ BOOL _insertMenuItemW(HMENU hMenu, UINT uItem, BOOL fByPosition, LPMENUITEMINFOW
 }
 
 
-Dstring regQueryValueString(HKEY hkey, Dstring valueName, LPDWORD lpType = null)
+string regQueryValueString(HKEY hkey, string valueName, LPDWORD lpType = null)
 {
 	DWORD _type;
 	if(!lpType)
@@ -2080,7 +2046,7 @@ Dstring regQueryValueString(HKEY hkey, Dstring valueName, LPDWORD lpType = null)
 		}
 		else
 		{
-			const Dstring NAME = "RegQueryValueExW";
+			const string NAME = "RegQueryValueExW";
 			static RegQueryValueExWProc proc = null;
 			
 			if(!proc)
@@ -2127,7 +2093,7 @@ struct LogFont
 	}
 	alias lfw lf;
 	
-	Dstring faceName;
+	string faceName;
 }
 
 
@@ -2141,7 +2107,7 @@ HFONT createFontIndirect(ref LogFont lf)
 		}
 		else
 		{
-			const Dstring NAME = "CreateFontIndirectW";
+			const string NAME = "CreateFontIndirectW";
 			static CreateFontIndirectWProc proc = null;
 			
 			if(!proc)
@@ -2152,7 +2118,7 @@ HFONT createFontIndirect(ref LogFont lf)
 			}
 		}
 		
-		Dwstring ws = toUnicode(lf.faceName);
+		wstring ws = toUnicode(lf.faceName);
 		if(ws.length >= LF_FACESIZE)
 			ws = ws[0 .. LF_FACESIZE - 1]; // ?
 		foreach(idx, wch; ws)
@@ -2165,7 +2131,7 @@ HFONT createFontIndirect(ref LogFont lf)
 	}
 	else
 	{
-		Dstring as = toAnsi(lf.faceName);
+		string as = toAnsi(lf.faceName);
 		if(as.length >= LF_FACESIZE)
 			as = as[0 .. LF_FACESIZE - 1]; // ?
 		foreach(idx, ach; as)
@@ -2190,7 +2156,7 @@ int getLogFont(HFONT hf, ref LogFont lf)
 		}
 		else
 		{
-			const Dstring NAME = "GetObjectW";
+			const string NAME = "GetObjectW";
 			static GetObjectWProc proc = null;
 			
 			if(!proc)

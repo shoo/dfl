@@ -380,7 +380,7 @@ class Form: ContainerControl, IDialogResult // docmain
 		
 		debug
 		{
-			Dstring er;
+			string er;
 		}
 		if(killing)
 		{
@@ -400,7 +400,7 @@ class Form: ContainerControl, IDialogResult // docmain
 			}
 			
 			create_err:
-			Dstring kmsg = "Form creation failure";
+			string kmsg = "Form creation failure";
 			if(name.length)
 				kmsg ~= " (" ~ name ~ ")";
 			debug
@@ -3562,7 +3562,7 @@ version(DFL_PARK_WINDOW)
 	}
 	
 	
-	const Dstring PARK_CLASSNAME = "DFL_Parking";
+	const string PARK_CLASSNAME = "DFL_Parking";
 	
 	HWND _hwPark; // Don't use directly; use getParkHwnd().
 }

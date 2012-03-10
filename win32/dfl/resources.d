@@ -28,7 +28,7 @@ else
 		
 		/// ditto
 		// Note: libName gets unloaded and may take down all its resources with it.
-		this(Dstring libName, WORD language = 0)
+		this(string libName, WORD language = 0)
 		{
 			HINSTANCE inst;
 			inst = loadLibraryEx(libName, LOAD_LIBRARY_AS_DATAFILE);
@@ -87,7 +87,7 @@ else
 		}
 		
 		/// ditto
-		final Icon getIcon(Dstring name, bool defaultSize = true)
+		final Icon getIcon(string name, bool defaultSize = true)
 		{
 			/+
 			HICON hi;
@@ -124,7 +124,7 @@ else
 		}
 		
 		/// ditto
-		final Icon getIcon(Dstring name, int width, int height)
+		final Icon getIcon(string name, int width, int height)
 		{
 			// Can't have size 0 (plus causes Windows to use the actual size).
 			//if(width <= 0 || height <= 0)
@@ -157,7 +157,7 @@ else
 		}
 		
 		/// ditto
-		final Bitmap getBitmap(Dstring name)
+		final Bitmap getBitmap(string name)
 		{
 			HBITMAP h;
 			h = cast(HBITMAP)loadImage(hinst, name, IMAGE_BITMAP,
@@ -187,7 +187,7 @@ else
 		}
 		
 		/// ditto
-		final Cursor getCursor(Dstring name)
+		final Cursor getCursor(string name)
 		{
 			HCURSOR h;
 			h = cast(HCURSOR)loadImage(hinst, name, IMAGE_CURSOR,
@@ -201,16 +201,16 @@ else
 		
 		
 		///
-		final Dstring getString(int id)
+		final string getString(int id)
 		in
 		{
 			assert(id >= WORD.min && id <= WORD.max);
 		}
 		body
 		{
-			// Not casting to wDstring because a resource isn't guaranteed to be the same size.
+			// Not casting to wstring because a resource isn't guaranteed to be the same size.
 			wchar* ws = cast(wchar*)_getData(cast(LPCWSTR)RT_STRING, cast(LPCWSTR)cast(WORD)(id / 16 + 1)).ptr;
-			Dstring result;
+			string result;
 			if(ws)
 			{
 				int i;
@@ -256,7 +256,7 @@ else
 		}
 		
 		/// ditto
-		final void[] getData(Dstring type, int id)
+		final void[] getData(string type, int id)
 		in
 		{
 			assert(id >= WORD.min && id <= WORD.max);
@@ -267,7 +267,7 @@ else
 		}
 		
 		/// ditto
-		final void[] getData(int type, Dstring name)
+		final void[] getData(int type, string name)
 		in
 		{
 			assert(type >= WORD.min && type <= WORD.max);
@@ -278,7 +278,7 @@ else
 		}
 		
 		/// ditto
-		final void[] getData(Dstring type, Dstring name)
+		final void[] getData(string type, string name)
 		{
 			return _getData(utf8stringToUtf16stringz(type), utf8stringToUtf16stringz(name));
 		}
@@ -298,7 +298,7 @@ else
 		bool _owned = false;
 		
 		
-		void _noload(Dstring type)
+		void _noload(string type)
 		{
 			throw new DflException("Unable to load " ~ type ~ " resource");
 		}

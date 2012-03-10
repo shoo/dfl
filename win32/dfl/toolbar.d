@@ -46,7 +46,7 @@ class ToolBarButton
 	}
 	
 	///
-	this(Dstring text)
+	this(string text)
 	{
 		this();
 		
@@ -77,7 +77,7 @@ class ToolBarButton
 	
 	
 	///
-	@property void text(Dstring newText) // setter
+	@property void text(string newText) // setter
 	{
 		_text = newText;
 		
@@ -86,7 +86,7 @@ class ToolBarButton
 	}
 	
 	/// ditto
-	@property Dstring text() // getter
+	@property string text() // getter
 	{
 		return _text;
 	}
@@ -108,7 +108,7 @@ class ToolBarButton
 	}
 	
 	
-	override Dstring toString()
+	override string toString()
 	{
 		return text;
 	}
@@ -120,7 +120,7 @@ class ToolBarButton
 	}
 	
 	
-	Dequ opEquals(Dstring val)
+	Dequ opEquals(string val)
 	{
 		return text == val;
 	}
@@ -132,7 +132,7 @@ class ToolBarButton
 	}
 	
 	
-	int opCmp(Dstring val)
+	int opCmp(string val)
 	{
 		return stringICmp(text, val);
 	}
@@ -278,7 +278,7 @@ class ToolBarButton
 	private:
 	ToolBar tbar;
 	int _id = 0;
-	Dstring _text;
+	string _text;
 	Object _tag;
 	ToolBarButtonStyle _style = ToolBarButtonStyle.PUSH_BUTTON;
 	BYTE _state = TBSTATE_ENABLED;
@@ -661,7 +661,7 @@ class ToolBar: ControlSuperClass // docmain
 
 private
 {
-	const Dstring TOOLBAR_CLASSNAME = "DFL_ToolBar";
+	const string TOOLBAR_CLASSNAME = "DFL_ToolBar";
 	
 	WNDPROC toolbarPrevWndProc;
 	

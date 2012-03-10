@@ -170,7 +170,7 @@ class ComboBox: ListControl // docmain
 	}
 	
 	/// ditto
-	final @property void selectedItem(Dstring str) // setter
+	final @property void selectedItem(string str) // setter
 	{
 		int i;
 		i = items.indexOf(str);
@@ -196,7 +196,7 @@ class ComboBox: ListControl // docmain
 	}
 	
 	/// ditto
-	override @property void selectedValue(Dstring str) // setter
+	override @property void selectedValue(string str) // setter
 	{
 		selectedItem = str;
 	}
@@ -243,7 +243,7 @@ class ComboBox: ListControl // docmain
 	
 	
 	///
-	final int findString(Dstring str, int startIndex)
+	final int findString(string str, int startIndex)
 	{
 		// TODO: find string if control not created ?
 		
@@ -263,14 +263,14 @@ class ComboBox: ListControl // docmain
 	}
 	
 	/// ditto
-	final int findString(Dstring str)
+	final int findString(string str)
 	{
 		return findString(str, -1); // Start at beginning.
 	}
 	
 	
 	///
-	final int findStringExact(Dstring str, int startIndex)
+	final int findStringExact(string str, int startIndex)
 	{
 		// TODO: find string if control not created ?
 		
@@ -290,7 +290,7 @@ class ComboBox: ListControl // docmain
 	}
 	
 	/// ditto
-	final int findStringExact(Dstring str)
+	final int findStringExact(string str)
 	{
 		return findStringExact(str, -1); // Start at beginning.
 	}
@@ -522,7 +522,7 @@ class ComboBox: ListControl // docmain
 		}
 		
 		
-		protected this(ComboBox lbox, Dstring[] range)
+		protected this(ComboBox lbox, string[] range)
 		{
 			this.lbox = lbox;
 			addRange(range);
@@ -543,7 +543,7 @@ class ComboBox: ListControl // docmain
 			add2(value);
 		}
 		
-		void add(Dstring value)
+		void add(string value)
 		{
 			add(new ListString(value));
 		}
@@ -564,9 +564,9 @@ class ComboBox: ListControl // docmain
 			}
 		}
 		
-		void addRange(Dstring[] range)
+		void addRange(string[] range)
 		{
-			foreach(Dstring s; range)
+			foreach(string s; range)
 			{
 				add(s);
 			}
@@ -584,7 +584,7 @@ class ComboBox: ListControl // docmain
 		}
 		
 		
-		LRESULT insert2(WPARAM idx, Dstring val)
+		LRESULT insert2(WPARAM idx, string val)
 		{
 			insert(idx, val);
 			return idx;
@@ -613,7 +613,7 @@ class ComboBox: ListControl // docmain
 		}
 		
 		
-		LRESULT add2(Dstring val)
+		LRESULT add2(string val)
 		{
 			return add2(new ListString(val));
 		}
@@ -748,7 +748,7 @@ class ComboBox: ListControl // docmain
 		if(hasDropList)
 			wrect.height = DEFAULT_ITEM_HEIGHT * 8;
 		
-		Dstring ft;
+		string ft;
 		ft = wtext;
 		
 		super.createHandle();
@@ -906,7 +906,7 @@ class ComboBox: ListControl // docmain
 						{
 							// Hack.
 							Object item = selectedItem;
-							text = item ? getObjectString(item) : cast(Dstring)null;
+							text = item ? getObjectString(item) : cast(string)null;
 						}
 						+/
 						onSelectedIndexChanged(EventArgs.empty);
@@ -941,13 +941,13 @@ class ComboBox: ListControl // docmain
 			case CB_ADDSTRING:
 				//msg.result = icollection.add2(stringFromStringz(cast(char*)msg.lParam).dup); // TODO: fix.
 				//msg.result = icollection.add2(stringFromStringz(cast(char*)msg.lParam).idup); // TODO: fix. // Needed in D2. Doesn't work in D1.
-				msg.result = icollection.add2(cast(Dstring)stringFromStringz(cast(char*)msg.lParam).dup); // TODO: fix. // Needed in D2.
+				msg.result = icollection.add2(cast(string)stringFromStringz(cast(char*)msg.lParam).dup); // TODO: fix. // Needed in D2.
 				return;
 			
 			case CB_INSERTSTRING:
 				//msg.result = icollection.insert2(msg.wParam, stringFromStringz(cast(char*)msg.lParam).dup); // TODO: fix.
 				//msg.result = icollection.insert2(msg.wParam, stringFromStringz(cast(char*)msg.lParam).idup); // TODO: fix. // Needed in D2. Doesn't work in D1.
-				msg.result = icollection.insert2(msg.wParam, cast(Dstring)stringFromStringz(cast(char*)msg.lParam).dup); // TODO: fix. // Needed in D2.
+				msg.result = icollection.insert2(msg.wParam, cast(string)stringFromStringz(cast(char*)msg.lParam).dup); // TODO: fix. // Needed in D2.
 				return;
 			
 			case CB_DELETESTRING:

@@ -979,7 +979,7 @@ abstract class Image // docmain
 	
 	
 	/+
-	static Image fromFile(Dstring file)
+	static Image fromFile(string file)
 	{
 		return new Image(LoadImageA());
 	}
@@ -1024,7 +1024,7 @@ class Bitmap: Image // docmain
 {
 	///
 	// Load from a bmp file.
-	this(Dstring fileName)
+	this(string fileName)
 	{
 		this.hbm = cast(HBITMAP)dfl.internal.utf.loadImage(null, fileName, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 		if(!this.hbm)
@@ -1198,7 +1198,7 @@ class Picture: Image // docmain
 	
 	/// ditto
 	// Throws exception on failure.
-	this(Dstring fileName)
+	this(string fileName)
 	{
 		this.ipic = _fromFileName(fileName);
 		if(!this.ipic)
@@ -1234,7 +1234,7 @@ class Picture: Image // docmain
 	
 	///
 	// Returns null on failure instead of throwing exception.
-	static Picture fromFile(Dstring fileName)
+	static Picture fromFile(string fileName)
 	{
 		auto ipic = _fromFileName(fileName);
 		if(!ipic)
@@ -1529,7 +1529,7 @@ class Picture: Image // docmain
 	}
 	
 	
-	static dfl.internal.wincom.IPicture _fromFileName(Dstring fileName)
+	static dfl.internal.wincom.IPicture _fromFileName(string fileName)
 	{
 		alias dfl.internal.winapi.HANDLE HANDLE; // Otherwise, odd conflict with wine.
 		
@@ -2387,7 +2387,7 @@ class Graphics // docmain
 	// Windows 95/98/Me limits -text- to 8192 characters.
 	
 	///
-	final void drawText(Dstring text, Font font, Color color, Rect r, TextFormat fmt)
+	final void drawText(string text, Font font, Color color, Rect r, TextFormat fmt)
 	{
 		// Should SaveDC/RestoreDC be used instead?
 		
@@ -2414,14 +2414,14 @@ class Graphics // docmain
 	}
 	
 	/// ditto
-	final void drawText(Dstring text, Font font, Color color, Rect r)
+	final void drawText(string text, Font font, Color color, Rect r)
 	{
 		return drawText(text, font, color, r, getCachedTextFormat());
 	}
 	
 	
 	///
-	final void drawTextDisabled(Dstring text, Font font, Color color, Color backColor, Rect r, TextFormat fmt)
+	final void drawTextDisabled(string text, Font font, Color color, Color backColor, Rect r, TextFormat fmt)
 	{
 		r.offset(1, 1);
 		//drawText(text, font, Color(24, color).solidColor(backColor), r, fmt); // Lighter, lower one.
@@ -2432,14 +2432,14 @@ class Graphics // docmain
 	}
 	
 	/// ditto
-	final void drawTextDisabled(Dstring text, Font font, Color color, Color backColor, Rect r)
+	final void drawTextDisabled(string text, Font font, Color color, Color backColor, Rect r)
 	{
 		return drawTextDisabled(text, font, color, backColor, r, getCachedTextFormat());
 	}
 	
 	
 	/+
-	final Size measureText(Dstring text, Font font)
+	final Size measureText(string text, Font font)
 	{
 		SIZE sz;
 		HFONT prevFont;
@@ -2460,7 +2460,7 @@ class Graphics // docmain
 	
 	
 	///
-	final Size measureText(Dstring text, Font font, int maxWidth, TextFormat fmt)
+	final Size measureText(string text, Font font, int maxWidth, TextFormat fmt)
 	{
 		RECT rect;
 		HFONT prevFont;
@@ -2489,19 +2489,19 @@ class Graphics // docmain
 	}
 	
 	/// ditto
-	final Size measureText(Dstring text, Font font, TextFormat fmt)
+	final Size measureText(string text, Font font, TextFormat fmt)
 	{
 		return measureText(text, font, DEFAULT_MEASURE_SIZE, fmt);
 	}
 	
 	/// ditto
-	final Size measureText(Dstring text, Font font, int maxWidth)
+	final Size measureText(string text, Font font, int maxWidth)
 	{
 		return measureText(text, font, maxWidth, getCachedTextFormat());
 	}
 	
 	/// ditto
-	final Size measureText(Dstring text, Font font)
+	final Size measureText(string text, Font font)
 	{
 		return measureText(text, font, DEFAULT_MEASURE_SIZE, getCachedTextFormat());
 	}
@@ -2510,7 +2510,7 @@ class Graphics // docmain
 	/+
 	// Doesn't work... dfl.internal.utf.drawTextEx uses a different buffer!
 	// ///
-	final Dstring getTrimmedText(Dstring text, Font font, Rect r, TextFormat fmt) // deprecated
+	final string getTrimmedText(string text, Font font, Rect r, TextFormat fmt) // deprecated
 	{
 		switch(fmt.trimming)
 		{
@@ -2553,7 +2553,7 @@ class Graphics // docmain
 	}
 	
 	// ///
-	final Dstring getTrimmedText(Dstring text, Font font, Rect r, TextTrimming trim)
+	final string getTrimmedText(string text, Font font, Rect r, TextTrimming trim)
 	{
 		scope fmt = new TextFormat(TextFormatFlags.NO_PREFIX | TextFormatFlags.WORD_BREAK |
 			TextFormatFlags.NO_CLIP | TextFormatFlags.LINE_LIMIT);
@@ -2915,7 +2915,7 @@ class Graphics // docmain
 		Size result;
 		version(DIALOG_BOX_SCALE)
 		{
-			const Dstring SAMPLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+			const string SAMPLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 			result = measureText(SAMPLE, f);
 			result.width = (result.width / (SAMPLE.length / 2) + 1) / 2;
 			TEXTMETRICA tma;
@@ -2924,7 +2924,7 @@ class Graphics // docmain
 		}
 		else
 		{
-			const Dstring SAMPLE = "Abcdefghijklmnopqrstuvwxyz";
+			const string SAMPLE = "Abcdefghijklmnopqrstuvwxyz";
 			result = measureText(SAMPLE, f);
 			result.width /= SAMPLE.length;
 		}
@@ -3170,7 +3170,7 @@ class Icon: Image // docmain
 	
 	///
 	// Load from an ico file.
-	this(Dstring fileName)
+	this(string fileName)
 	{
 		this.hi = cast(HICON)dfl.internal.utf.loadImage(null, fileName, IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
 		if(!this.hi)
@@ -3364,19 +3364,19 @@ class FontFamily
 	+/
 	
 	
-	this(Dstring name)
+	this(string name)
 	{
 		
 	}
 	
 	
-	this(Dstring name, FontCollection fontCollection)
+	this(string name, FontCollection fontCollection)
 	{
 		
 	}
 	
 	
-	final @property Dstring name() // getter
+	final @property string name() // getter
 	{
 		
 	}
@@ -3688,14 +3688,14 @@ class Font // docmain
 	}
 	
 	/// ditto
-	this(Dstring name, float emSize, GraphicsUnit unit)
+	this(string name, float emSize, GraphicsUnit unit)
 	{
 		this(name, emSize, FontStyle.REGULAR, unit);
 	}
 	
 	
 	/// ditto
-	this(Dstring name, float emSize, FontStyle style = FontStyle.REGULAR,
+	this(string name, float emSize, FontStyle style = FontStyle.REGULAR,
 		GraphicsUnit unit = GraphicsUnit.POINT)
 	{
 		this(name, emSize, style, unit, DEFAULT_CHARSET, FontSmoothing.DEFAULT);
@@ -3703,7 +3703,7 @@ class Font // docmain
 	
 	
 	/// ditto
-	this(Dstring name, float emSize, FontStyle style,
+	this(string name, float emSize, FontStyle style,
 		GraphicsUnit unit, FontSmoothing smoothing)
 	{
 		this(name, emSize, style, unit, DEFAULT_CHARSET, smoothing);
@@ -3712,7 +3712,7 @@ class Font // docmain
 	// /// ditto
 	// This is a somewhat internal function.
 	// -gdiCharSet- is one of *_CHARSET from wingdi.h
-	this(Dstring name, float emSize, FontStyle style,
+	this(string name, float emSize, FontStyle style,
 		GraphicsUnit unit, ubyte gdiCharSet,
 		FontSmoothing smoothing = FontSmoothing.DEFAULT)
 	{
@@ -3803,7 +3803,7 @@ class Font // docmain
 	
 	
 	///
-	final @property Dstring name() // getter
+	final @property string name() // getter
 	{
 		return lfName;
 	}
@@ -3856,7 +3856,7 @@ class Font // docmain
 	FontStyle _fstyle;
 	
 	LONG lfHeight;
-	Dstring lfName;
+	string lfName;
 	ubyte lfCharSet;
 }
 

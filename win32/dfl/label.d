@@ -95,7 +95,7 @@ class Label: Control // docmain
 	}
 	
 	
-	private void doAutoSize(Dstring text)
+	private void doAutoSize(string text)
 	{
 		//if(isHandleCreated)
 		{
@@ -104,7 +104,7 @@ class Label: Control // docmain
 	}
 	
 	
-	override @property void text(Dstring newText) // setter
+	override @property void text(string newText) // setter
 	{
 		super.text = newText;
 		
@@ -246,7 +246,7 @@ class Label: Control // docmain
 	protected override void onPaint(PaintEventArgs ea)
 	{
 		int x, y, w, h;
-		Dstring text;
+		string text;
 		
 		text = this.text;
 		

@@ -65,7 +65,7 @@ class FolderBrowserDialog: CommonDialog // docmain
 	
 	
 	///
-	final @property void description(Dstring desc) // setter
+	final @property void description(string desc) // setter
 	{
 		// lpszTitle
 		
@@ -73,14 +73,14 @@ class FolderBrowserDialog: CommonDialog // docmain
 	}
 	
 	/// ditto
-	final @property Dstring description() // getter
+	final @property string description() // getter
 	{
 		return _desc;
 	}
 	
 	
 	///
-	final @property void selectedPath(Dstring selpath) // setter
+	final @property void selectedPath(string selpath) // setter
 	{
 		// pszDisplayName
 		
@@ -88,7 +88,7 @@ class FolderBrowserDialog: CommonDialog // docmain
 	}
 	
 	/// ditto
-	final @property Dstring selectedPath() // getter
+	final @property string selectedPath() // getter
 	{
 		return _selpath;
 	}
@@ -148,8 +148,8 @@ class FolderBrowserDialog: CommonDialog // docmain
 		
 		if(dfl.internal.utf.useUnicode)
 		{
-			const Dstring BROWSE_NAME = "SHBrowseForFolderW";
-			const Dstring PATH_NAME = "SHGetPathFromIDListW";
+			const string BROWSE_NAME = "SHBrowseForFolderW";
+			const string PATH_NAME = "SHGetPathFromIDListW";
 			static SHBrowseForFolderWProc browseproc = null;
 			static SHGetPathFromIDListWProc pathproc = null;
 			
@@ -172,7 +172,7 @@ class FolderBrowserDialog: CommonDialog // docmain
 			biw.pszDisplayName = cast(wchar*)pdescz;
 			if(_desc.length)
 			{
-				Dwstring tmp;
+				wstring tmp;
 				tmp = dfl.internal.utf.toUnicode(_desc);
 				if(tmp.length >= MAX_PATH)
 					_errPathTooLong();
@@ -221,7 +221,7 @@ class FolderBrowserDialog: CommonDialog // docmain
 			bia.pszDisplayName = cast(char*)pdescz;
 			if(_desc.length)
 			{
-				Dstring tmp; // ansi.
+				string tmp; // ansi.
 				tmp = dfl.internal.utf.toAnsi(_desc);
 				if(tmp.length >= MAX_PATH)
 					_errPathTooLong();
@@ -311,8 +311,8 @@ class FolderBrowserDialog: CommonDialog // docmain
 		static assert(BROWSEINFOW.ulFlags.offsetof == BROWSEINFOA.ulFlags.offsetof);
 	}
 	
-	Dstring _desc;
-	Dstring _selpath;
+	string _desc;
+	string _selpath;
 	
 	
 	const UINT INIT_FLAGS = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
@@ -331,7 +331,7 @@ private extern(Windows) int fbdHookProc(HWND hwnd, UINT msg, LPARAM lparam, LPAR
 		fd = cast(FolderBrowserDialog)cast(void*)lpData;
 		if(fd)
 		{
-			Dstring s;
+			string s;
 			switch(msg)
 			{
 				case BFFM_INITIALIZED:

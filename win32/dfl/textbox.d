@@ -106,10 +106,10 @@ abstract class TextBoxBase: ControlSuperClass // docmain
 	
 	
 	///
-	final @property void lines(Dstring[] lns) // setter
+	final @property void lines(string[] lns) // setter
 	{
-		Dstring result;
-		foreach(Dstring s; lns)
+		string result;
+		foreach(string s; lns)
 		{
 			result ~= s ~ "\r\n";
 		}
@@ -119,7 +119,7 @@ abstract class TextBoxBase: ControlSuperClass // docmain
 	}
 	
 	/// ditto
-	final @property Dstring[] lines() // getter
+	final @property string[] lines() // getter
 	{
 		return stringSplitLines(text);
 	}
@@ -168,7 +168,7 @@ abstract class TextBoxBase: ControlSuperClass // docmain
 			return cast(uint)SendMessageA(handle, EM_GETLINECOUNT, 0, 0);
 		}
 		
-		Dstring s;
+		string s;
 		size_t iw = 0;
 		uint count = 1;
 		s = text;
@@ -273,7 +273,7 @@ abstract class TextBoxBase: ControlSuperClass // docmain
 	
 	
 	///
-	@property void selectedText(Dstring sel) // setter
+	@property void selectedText(string sel) // setter
 	{
 		/+
 		if(created)
@@ -288,7 +288,7 @@ abstract class TextBoxBase: ControlSuperClass // docmain
 	}
 	
 	/// ditto
-	@property Dstring selectedText() // getter
+	@property string selectedText() // getter
 	{
 		/+
 		if(created)
@@ -298,7 +298,7 @@ abstract class TextBoxBase: ControlSuperClass // docmain
 			if(v1 == v2)
 				return null;
 			assert(v2 > v1);
-			Dstring result = new char[v2 - v1 + 1];
+			string result = new char[v2 - v1 + 1];
 			result[result.length - 1] = 0;
 			result = result[0 .. result.length - 1];
 			result[] = text[v1 .. v2];
@@ -437,7 +437,7 @@ abstract class TextBoxBase: ControlSuperClass // docmain
 	
 	
 	///
-	final void appendText(Dstring txt)
+	final void appendText(string txt)
 	{
 		if(created)
 		{
@@ -562,7 +562,7 @@ abstract class TextBoxBase: ControlSuperClass // docmain
 	}
 	
 	
-	override Dstring toString()
+	override string toString()
 	{
 		return text; // ?
 	}
@@ -593,7 +593,7 @@ abstract class TextBoxBase: ControlSuperClass // docmain
 	{
 		if(!isHandleCreated)
 		{
-			Dstring txt;
+			string txt;
 			txt = wtext;
 			
 			super.createHandle();

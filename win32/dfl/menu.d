@@ -88,7 +88,7 @@ else
 	class MenuItem: Menu // docmain
 	{
 		///
-		final @property void text(Dstring txt) // setter
+		final @property void text(string txt) // setter
 		{
 			if(!menuItems.length && txt == SEPARATOR_TEXT)
 			{
@@ -116,7 +116,7 @@ else
 		}
 		
 		/// ditto
-		final @property Dstring text() // getter
+		final @property string text() // getter
 		{
 			// if(mparent) fetch text ?
 			return mtext;
@@ -476,7 +476,7 @@ else
 		}
 		
 		/// ditto
-		this(Dstring text)
+		this(string text)
 		{
 			_init();
 			
@@ -484,7 +484,7 @@ else
 		}
 		
 		/// ditto
-		this(Dstring text, MenuItem[] items)
+		this(string text, MenuItem[] items)
 		{
 			if(items.length)
 			{
@@ -518,7 +518,7 @@ else
 		}
 		
 		
-		override Dstring toString()
+		override string toString()
 		{
 			return text;
 		}
@@ -530,7 +530,7 @@ else
 		}
 		
 		
-		Dequ opEquals(Dstring val)
+		Dequ opEquals(string val)
 		{
 			return text == val;
 		}
@@ -542,7 +542,7 @@ else
 		}
 		
 		
-		int opCmp(Dstring val)
+		int opCmp(string val)
 		{
 			return stringICmp(text, val);
 		}
@@ -625,14 +625,14 @@ else
 		private:
 		
 		int mid; // Menu ID.
-		Dstring mtext;
+		string mtext;
 		Menu mparent;
 		UINT fType = 0; // MFT_*
 		UINT fState = 0;
 		int mindex = -1; //0;
 		//int mergeord = 0;
 		
-		const Dstring SEPARATOR_TEXT = "-";
+		const string SEPARATOR_TEXT = "-";
 		
 		static assert(!MFS_UNCHECKED);
 		static assert(!MFT_STRING);
@@ -786,7 +786,7 @@ else
 				insert(mi.mindex, mi);
 			}
 			
-			void add(Dstring value)
+			void add(string value)
 			{
 				return add(new MenuItem(value));
 			}
@@ -803,12 +803,12 @@ else
 				}
 			}
 			
-			void addRange(Dstring[] items)
+			void addRange(string[] items)
 			{
 				if(!Menu._compat092)
 					return _wraparray.addRange(items);
 				
-				foreach(Dstring it; items)
+				foreach(string it; items)
 				{
 					insert(length, it);
 				}
@@ -968,7 +968,7 @@ else
 		}
 		
 		
-		/+ package +/ protected void _setInfo(UINT uItem, BOOL fByPosition, LPMENUITEMINFOA lpmii, Dstring typeData = null) // package
+		/+ package +/ protected void _setInfo(UINT uItem, BOOL fByPosition, LPMENUITEMINFOA lpmii, string typeData = null) // package
 		{
 			if(typeData.length)
 			{
@@ -991,7 +991,7 @@ else
 		}
 		
 		
-		/+ package +/ protected void _insert(UINT uItem, BOOL fByPosition, LPMENUITEMINFOA lpmii, Dstring typeData = null) // package
+		/+ package +/ protected void _insert(UINT uItem, BOOL fByPosition, LPMENUITEMINFOA lpmii, string typeData = null) // package
 		{
 			if(typeData.length)
 			{
@@ -1052,7 +1052,7 @@ else
 		}
 		
 		
-		/+ package +/ protected override void _setInfo(UINT uItem, BOOL fByPosition, LPMENUITEMINFOA lpmii, Dstring typeData = null) // package
+		/+ package +/ protected override void _setInfo(UINT uItem, BOOL fByPosition, LPMENUITEMINFOA lpmii, string typeData = null) // package
 		{
 			Menu._setInfo(uItem, fByPosition, lpmii, typeData);
 			
@@ -1061,7 +1061,7 @@ else
 		}
 		
 		
-		/+ package +/ protected override void _insert(UINT uItem, BOOL fByPosition, LPMENUITEMINFOA lpmii, Dstring typeData = null) // package
+		/+ package +/ protected override void _insert(UINT uItem, BOOL fByPosition, LPMENUITEMINFOA lpmii, string typeData = null) // package
 		{
 			Menu._insert(uItem, fByPosition, lpmii, typeData);
 			

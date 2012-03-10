@@ -58,39 +58,39 @@ enum MsgBoxOptions
 
 
 ///
-DialogResult msgBox(Dstring txt) // docmain
+DialogResult msgBox(string txt) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(GetActiveWindow(), txt, "\0", MB_OK);
 }
 
 /// ditto
-DialogResult msgBox(IWindow owner, Dstring txt) // docmain
+DialogResult msgBox(IWindow owner, string txt) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(owner ? owner.handle : GetActiveWindow(),
 		txt, "\0", MB_OK);
 }
 
 /// ditto
-DialogResult msgBox(Dstring txt, Dstring caption) // docmain
+DialogResult msgBox(string txt, string caption) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(GetActiveWindow(), txt, caption, MB_OK);
 }
 
 /// ditto
-DialogResult msgBox(IWindow owner, Dstring txt, Dstring caption) // docmain
+DialogResult msgBox(IWindow owner, string txt, string caption) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(owner ? owner.handle : GetActiveWindow(),
 		txt, caption, MB_OK);
 }
 
 /// ditto
-DialogResult msgBox(Dstring txt, Dstring caption, MsgBoxButtons buttons) // docmain
+DialogResult msgBox(string txt, string caption, MsgBoxButtons buttons) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(GetActiveWindow(), txt, caption, buttons);
 }
 
 /// ditto
-DialogResult msgBox(IWindow owner, Dstring txt, Dstring caption,
+DialogResult msgBox(IWindow owner, string txt, string caption,
 	MsgBoxButtons buttons) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(owner ? owner.handle : GetActiveWindow(),
@@ -98,7 +98,7 @@ DialogResult msgBox(IWindow owner, Dstring txt, Dstring caption,
 }
 
 /// ditto
-DialogResult msgBox(Dstring txt, Dstring caption, MsgBoxButtons buttons,
+DialogResult msgBox(string txt, string caption, MsgBoxButtons buttons,
 	MsgBoxIcon icon) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(GetActiveWindow(), txt,
@@ -106,7 +106,7 @@ DialogResult msgBox(Dstring txt, Dstring caption, MsgBoxButtons buttons,
 }
 
 /// ditto
-DialogResult msgBox(IWindow owner, Dstring txt, Dstring caption, MsgBoxButtons buttons,
+DialogResult msgBox(IWindow owner, string txt, string caption, MsgBoxButtons buttons,
 	MsgBoxIcon icon) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(owner ? owner.handle : GetActiveWindow(),
@@ -114,7 +114,7 @@ DialogResult msgBox(IWindow owner, Dstring txt, Dstring caption, MsgBoxButtons b
 }
 
 /// ditto
-DialogResult msgBox(Dstring txt, Dstring caption, MsgBoxButtons buttons, MsgBoxIcon icon,
+DialogResult msgBox(string txt, string caption, MsgBoxButtons buttons, MsgBoxIcon icon,
 	MsgBoxDefaultButton defaultButton) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(GetActiveWindow(), txt,
@@ -122,7 +122,7 @@ DialogResult msgBox(Dstring txt, Dstring caption, MsgBoxButtons buttons, MsgBoxI
 }
 
 /// ditto
-DialogResult msgBox(IWindow owner, Dstring txt, Dstring caption, MsgBoxButtons buttons,
+DialogResult msgBox(IWindow owner, string txt, string caption, MsgBoxButtons buttons,
 	MsgBoxIcon icon, MsgBoxDefaultButton defaultButton) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(owner ? owner.handle : GetActiveWindow(),
@@ -130,7 +130,7 @@ DialogResult msgBox(IWindow owner, Dstring txt, Dstring caption, MsgBoxButtons b
 }
 
 /// ditto
-DialogResult msgBox(IWindow owner, Dstring txt, Dstring caption, MsgBoxButtons buttons,
+DialogResult msgBox(IWindow owner, string txt, string caption, MsgBoxButtons buttons,
 	MsgBoxIcon icon, MsgBoxDefaultButton defaultButton, MsgBoxOptions options) // docmain
 {
 	return cast(DialogResult)dfl.internal.utf.messageBox(owner ? owner.handle : GetActiveWindow(),

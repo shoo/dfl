@@ -185,8 +185,8 @@ enum ControlStyles: uint
 /// Control creation parameters.
 struct CreateParams
 {
-	Dstring className; ///
-	Dstring caption; /// ditto
+	string className; ///
+	string caption; /// ditto
 	void* param; /// ditto
 	HWND parent; /// ditto
 	HMENU menu; /// ditto
@@ -574,7 +574,7 @@ version(_DFL_WINDOWS_HUNG_WORKAROUND)
 {
 	class WindowsHungDflException: DflException
 	{
-		this(Dstring msg)
+		this(string msg)
 		{
 			super(msg);
 		}
@@ -2127,13 +2127,13 @@ class Control: DObject, IWindow // docmain
 	
 	
 	/// Property: get or set the name of this control used in code.
-	final @property void name(Dstring txt) // setter
+	final @property void name(string txt) // setter
 	{
 		_ctrlname = txt;
 	}
 	
 	/// ditto
-	final @property Dstring name() // getter
+	final @property string name() // getter
 	{
 		return _ctrlname;
 	}
@@ -2650,14 +2650,14 @@ class Control: DObject, IWindow // docmain
 	}
 	
 	
-	private final Dstring _fetchText()
+	private final string _fetchText()
 	{
 		return dfl.internal.utf.getWindowText(hwnd);
 	}
 	
 	
 	///
-	@property void text(Dstring txt) // setter
+	@property void text(string txt) // setter
 	{
 		if(isHandleCreated)
 		{
@@ -2677,7 +2677,7 @@ class Control: DObject, IWindow // docmain
 	}
 	
 	/// ditto
-	@property Dstring text() // getter
+	@property string text() // getter
 	{
 		if(isHandleCreated)
 		{
@@ -3586,7 +3586,7 @@ class Control: DObject, IWindow // docmain
 	
 	
 	///
-	static bool isMnemonic(dchar charCode, Dstring text)
+	static bool isMnemonic(dchar charCode, string text)
 	{
 		uint ui;
 		for(ui = 0; ui != text.length; ui++)
@@ -4031,7 +4031,7 @@ class Control: DObject, IWindow // docmain
 	}
 	
 	
-	override Dstring toString()
+	override string toString()
 	{
 		return text;
 	}
@@ -5419,7 +5419,7 @@ class Control: DObject, IWindow // docmain
 										else
 										{
 											// ANSI.
-											Dstring ansi;
+											string ansi;
 											ansi = dfl.internal.utf.toAnsi(this.name);
 											if(msg.wParam <= ansi.length)
 												ansi = ansi[0 .. msg.wParam - 1];
@@ -5431,7 +5431,7 @@ class Control: DObject, IWindow // docmain
 									else
 									{
 										// Unicode.
-										Dwstring uni;
+										wstring uni;
 										uni = dfl.internal.utf.toUnicode(this.name);
 										if(msg.wParam <= uni.length)
 											uni = uni[0 .. msg.wParam - 1];
@@ -5948,7 +5948,7 @@ class Control: DObject, IWindow // docmain
 	}
 	
 	/// ditto
-	this(Dstring text)
+	this(string text)
 	{
 		this();
 		wtext = text;
@@ -5957,7 +5957,7 @@ class Control: DObject, IWindow // docmain
 	}
 	
 	/// ditto
-	this(Control cparent, Dstring text)
+	this(Control cparent, string text)
 	{
 		this();
 		wtext = text;
@@ -5967,7 +5967,7 @@ class Control: DObject, IWindow // docmain
 	}
 	
 	/// ditto
-	this(Dstring text, int left, int top, int width, int height)
+	this(string text, int left, int top, int width, int height)
 	{
 		this();
 		wtext = text;
@@ -5977,7 +5977,7 @@ class Control: DObject, IWindow // docmain
 	}
 	
 	/// ditto
-	this(Control cparent, Dstring text, int left, int top, int width, int height)
+	this(Control cparent, string text, int left, int top, int width, int height)
 	{
 		this();
 		wtext = text;
@@ -6217,7 +6217,7 @@ class Control: DObject, IWindow // docmain
 	}
 	
 	
-	deprecated package final void createClassHandle(Dstring className)
+	deprecated package final void createClassHandle(string className)
 	{
 		if(!wparent || !wparent.handle || killing)
 		{
@@ -6287,7 +6287,7 @@ class Control: DObject, IWindow // docmain
 		
 		debug
 		{
-			Dstring er;
+			string er;
 		}
 		if(killing)
 		{
@@ -6302,7 +6302,7 @@ class Control: DObject, IWindow // docmain
 			}
 			
 			create_err:
-			Dstring kmsg = "Control creation failure";
+			string kmsg = "Control creation failure";
 			if(name.length)
 				kmsg ~= " (" ~ name ~ ")";
 			debug
@@ -6910,7 +6910,7 @@ class Control: DObject, IWindow // docmain
 		ContextMenu cmenu;
 	}
 	DockStyle sdock = DockStyle.NONE;
-	Dstring _ctrlname;
+	string _ctrlname;
 	Object otag;
 	Color backc, forec;
 	Rect wrect;
@@ -6921,7 +6921,7 @@ class Control: DObject, IWindow // docmain
 	Control wparent;
 	Region wregion;
 	ControlCollection ccollection;
-	Dstring wtext; // After creation, this isn't used unless ControlStyles.CACHE_TEXT.
+	string wtext; // After creation, this isn't used unless ControlStyles.CACHE_TEXT.
 	ControlStyles ctrlStyle = ControlStyles.STANDARD_CLICK | ControlStyles.STANDARD_DOUBLE_CLICK /+ | ControlStyles.RESIZE_REDRAW +/ ;
 	HBRUSH _hbrBg;
 	RightToLeft rtol = RightToLeft.INHERIT;

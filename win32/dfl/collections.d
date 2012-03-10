@@ -46,7 +46,7 @@ template ListWrapArray(TValue, alias Array,
 	
 	static if(OVERLOAD_STRING)
 	{
-		static assert(!is(TValue == Dstring));
+		static assert(!is(TValue == string));
 		
 		static if(is(TValue == Object))
 			alias StringObject TValueString;
@@ -92,7 +92,7 @@ template ListWrapArray(TValue, alias Array,
 	static if(OVERLOAD_STRING)
 	{
 		/// ditto
-		void opIndexAssign(Dstring value, int index)
+		void opIndexAssign(string value, int index)
 		{
 			return opIndexAssign(new TValueString(value), index);
 		}
@@ -124,7 +124,7 @@ template ListWrapArray(TValue, alias Array,
 	static if(OVERLOAD_STRING)
 	{
 		/// ditto
-		void add(Dstring value)
+		void add(string value)
 		{
 			_insert(cast(int)Array.length, new TValueString(value));
 		}
@@ -214,7 +214,7 @@ template ListWrapArray(TValue, alias Array,
 	static if(OVERLOAD_STRING)
 	{
 		/// ditto
-		bool contains(Dstring value)
+		bool contains(string value)
 		{
 			return -1 != indexOf(value);
 		}
@@ -253,7 +253,7 @@ template ListWrapArray(TValue, alias Array,
 	static if(OVERLOAD_STRING)
 	{
 		/// ditto
-		int indexOf(Dstring value)
+		int indexOf(string value)
 		{
 			foreach(size_t idx, TValue onval; Array)
 			{
@@ -322,7 +322,7 @@ template ListWrapArray(TValue, alias Array,
 	static if(OVERLOAD_STRING)
 	{
 		/// ditto
-		private final void _insert(int index, Dstring value)
+		private final void _insert(int index, string value)
 		{
 			return _insert(index, new TValueString(value));
 		}
@@ -347,7 +347,7 @@ template ListWrapArray(TValue, alias Array,
 	static if(OVERLOAD_STRING)
 	{
 		/// ditto
-		void insert(int index, Dstring value)
+		void insert(int index, string value)
 		{
 			return _insert(index, value);
 		}
@@ -387,7 +387,7 @@ template ListWrapArray(TValue, alias Array,
 	static if(OVERLOAD_STRING)
 	{
 		/// ditto
-		void remove(Dstring value)
+		void remove(string value)
 		{
 			int i;
 			i = indexOf(value);
@@ -461,9 +461,9 @@ template ListWrapArray(TValue, alias Array,
 	static if(OVERLOAD_STRING)
 	{
 		/// ditto
-		void addRange(Dstring[] values)
+		void addRange(string[] values)
 		{
-			foreach(Dstring value; values)
+			foreach(string value; values)
 			{
 				add(value);
 			}

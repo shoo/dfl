@@ -111,7 +111,7 @@ abstract class FileDialog: CommonDialog // docmain
 	
 	
 	///
-	final @property void defaultExt(Dstring ext) // setter
+	final @property void defaultExt(string ext) // setter
 	{
 		if(!ext.length)
 		{
@@ -136,7 +136,7 @@ abstract class FileDialog: CommonDialog // docmain
 	}
 	
 	/// ditto
-	final @property Dstring defaultExt() // getter
+	final @property string defaultExt() // getter
 	{
 		return _defext;
 	}
@@ -159,7 +159,7 @@ abstract class FileDialog: CommonDialog // docmain
 	
 	
 	///
-	final @property void fileName(Dstring fn) // setter
+	final @property void fileName(string fn) // setter
 	{
 		// TODO: check if correct implementation.
 		
@@ -172,13 +172,13 @@ abstract class FileDialog: CommonDialog // docmain
 		}
 		else
 		{
-			_fileNames = new Dstring[1];
+			_fileNames = new string[1];
 			_fileNames[0] = fn;
 		}
 	}
 	
 	/// ditto
-	final @property Dstring fileName() // getter
+	final @property string fileName() // getter
 	{
 		if(fileNames.length)
 			return fileNames[0];
@@ -187,7 +187,7 @@ abstract class FileDialog: CommonDialog // docmain
 	
 	
 	///
-	final @property Dstring[] fileNames() // getter
+	final @property string[] fileNames() // getter
 	{
 		if(needRebuildFiles)
 			populateFiles();
@@ -198,7 +198,7 @@ abstract class FileDialog: CommonDialog // docmain
 	
 	///
 	// The format string is like "Text files (*.txt)|*.txt|All files (*.*)|*.*".
-	final @property void filter(Dstring filterString) // setter
+	final @property void filter(string filterString) // setter
 	{
 		if(!filterString.length)
 		{
@@ -288,7 +288,7 @@ abstract class FileDialog: CommonDialog // docmain
 	}
 	
 	/// ditto
-	final @property Dstring filter() // getter
+	final @property string filter() // getter
 	{
 		return _filter;
 	}
@@ -309,7 +309,7 @@ abstract class FileDialog: CommonDialog // docmain
 	
 	
 	///
-	final @property void initialDirectory(Dstring dir) // setter
+	final @property void initialDirectory(string dir) // setter
 	{
 		if(!dir.length)
 		{
@@ -331,7 +331,7 @@ abstract class FileDialog: CommonDialog // docmain
 	}
 	
 	/// ditto
-	final @property Dstring initialDirectory() // getter
+	final @property string initialDirectory() // getter
 	{
 		return _initDir;
 	}
@@ -392,7 +392,7 @@ abstract class FileDialog: CommonDialog // docmain
 	
 	
 	///
-	final @property void title(Dstring newTitle) // setter
+	final @property void title(string newTitle) // setter
 	{
 		if(!newTitle.length)
 		{
@@ -414,7 +414,7 @@ abstract class FileDialog: CommonDialog // docmain
 	}
 	
 	/// ditto
-	final @property Dstring title() // getter
+	final @property string title() // getter
 	{
 		return _title;
 	}
@@ -501,11 +501,11 @@ abstract class FileDialog: CommonDialog // docmain
 		static assert(OPENFILENAMEW.sizeof == OPENFILENAMEA.sizeof);
 		static assert(OPENFILENAMEW.Flags.offsetof == OPENFILENAMEA.Flags.offsetof);
 	}
-	Dstring[] _fileNames;
-	Dstring _filter;
-	Dstring _initDir;
-	Dstring _defext;
-	Dstring _title;
+	string[] _fileNames;
+	string _filter;
+	string _initDir;
+	string _defext;
+	string _title;
 	//bool addext = true;
 	bool needRebuildFiles = false;
 	
@@ -524,7 +524,7 @@ abstract class FileDialog: CommonDialog // docmain
 			
 			if(fileNames.length)
 			{
-				Dwstring ts;
+				wstring ts;
 				ts = dfl.internal.utf.toUnicode(_fileNames[0]);
 				buf[0 .. ts.length] = ts;
 				buf[ts.length] = 0;
@@ -540,7 +540,7 @@ abstract class FileDialog: CommonDialog // docmain
 			
 			if(fileNames.length)
 			{
-				Dstring ts;
+				string ts;
 				ts = dfl.internal.utf.unsafeAnsi(_fileNames[0]);
 				buf[0 .. ts.length] = ts;
 				buf[ts.length] = 0;
@@ -565,7 +565,7 @@ abstract class FileDialog: CommonDialog // docmain
 		if(ofn.Flags & OFN_ALLOWMULTISELECT)
 		{
 			// Nonstandard reserve.
-			_fileNames = new Dstring[4];
+			_fileNames = new string[4];
 			_fileNames = _fileNames[0 .. 0];
 			
 			if(dfl.internal.utf.useUnicode)
@@ -616,11 +616,11 @@ abstract class FileDialog: CommonDialog // docmain
 			{
 				//_fileNames[0] = _fileNames[0].dup;
 				//_fileNames[0] = _fileNames[0].idup; // Needed in D2. Doesn't work in D1.
-				_fileNames[0] = cast(Dstring)_fileNames[0].dup; // Needed in D2.
+				_fileNames[0] = cast(string)_fileNames[0].dup; // Needed in D2.
 			}
 			else
 			{
-				Dstring s;
+				string s;
 				size_t i;
 				s = _fileNames[0];
 				
@@ -641,7 +641,7 @@ abstract class FileDialog: CommonDialog // docmain
 		}
 		else
 		{
-			_fileNames = new Dstring[1];
+			_fileNames = new string[1];
 			if(dfl.internal.utf.useUnicode)
 			{
 				_fileNames[0] = dfl.internal.utf.fromUnicodez(ofnw.lpstrFile);
@@ -656,10 +656,10 @@ abstract class FileDialog: CommonDialog // docmain
 			{
 				if(!ofn.nFileExtension || ofn.nFileExtension == _fileNames[0].length)
 				{
-					Dstring s;
+					string s;
 					typeof(ofn.nFilterIndex) onidx;
 					int i;
-					Dstring[] exts;
+					string[] exts;
 					
 					s = _filter;
 					onidx = ofn.nFilterIndex << 1;
@@ -680,7 +680,7 @@ abstract class FileDialog: CommonDialog // docmain
 						s = s[0 .. i];
 					
 					exts = stringSplit(s, ";");
-					foreach(Dstring ext; exts)
+					foreach(string ext; exts)
 					{
 						cprintf("sel ext:  %.*s\n", ext);
 					}
@@ -830,7 +830,7 @@ class OpenFileDialog: FileDialog // docmain
 		{
 			if(dfl.internal.utf.useUnicode)
 			{
-				const Dstring NAME = "GetOpenFileNameW";
+				const string NAME = "GetOpenFileNameW";
 				static GetOpenFileNameWProc proc = null;
 				
 				if(!proc)
@@ -937,7 +937,7 @@ class SaveFileDialog: FileDialog // docmain
 		{
 			if(dfl.internal.utf.useUnicode)
 			{
-				const Dstring NAME = "GetSaveFileNameW";
+				const string NAME = "GetSaveFileNameW";
 				static GetSaveFileNameWProc proc = null;
 				
 				if(!proc)
@@ -973,7 +973,7 @@ private extern(Windows) LRESULT ofnHookProc(HWND hwnd, UINT msg, WPARAM wparam, 
 {
 	alias dfl.internal.winapi.HANDLE HANDLE; // Otherwise, odd conflict with wine.
 	
-	const Dstring PROP_STR = "DFL_FileDialog";
+	const string PROP_STR = "DFL_FileDialog";
 	FileDialog fd;
 	LRESULT result = 0;
 	

@@ -108,7 +108,7 @@ class TreeViewEventArgs: EventArgs
 class NodeLabelEditEventArgs: EventArgs
 {
 	///
-	this(TreeNode node, Dstring label)
+	this(TreeNode node, string label)
 	{
 		_node = node;
 		_label = label;
@@ -129,7 +129,7 @@ class NodeLabelEditEventArgs: EventArgs
 	
 	
 	///
-	final @property Dstring label() // getter
+	final @property string label() // getter
 	{
 		return _label;
 	}
@@ -150,7 +150,7 @@ class NodeLabelEditEventArgs: EventArgs
 	
 	private:
 	TreeNode _node;
-	Dstring _label;
+	string _label;
 	bool _cancel = false;
 }
 
@@ -159,7 +159,7 @@ class NodeLabelEditEventArgs: EventArgs
 class TreeNode: DObject
 {
 	///
-	this(Dstring labelText)
+	this(string labelText)
 	{
 		this();
 		
@@ -167,7 +167,7 @@ class TreeNode: DObject
 	}
 	
 	/// ditto
-	this(Dstring labelText, TreeNode[] children)
+	this(string labelText, TreeNode[] children)
 	{
 		this();
 		
@@ -254,7 +254,7 @@ class TreeNode: DObject
 	
 	///
 	// Path from the root to this node.
-	final @property Dstring fullPath() // getter
+	final @property string fullPath() // getter
 	{
 		if(!tparent)
 			return ttext;
@@ -271,7 +271,7 @@ class TreeNode: DObject
 			ssep[sseplen++] = ch;
 		}
 		//return tparent.fullPath ~ ssep[0 .. sseplen] ~ ttext;
-		return tparent.fullPath ~ cast(Dstring)ssep[0 .. sseplen] ~ ttext; // Needed in D2.
+		return tparent.fullPath ~ cast(string)ssep[0 .. sseplen] ~ ttext; // Needed in D2.
 	}
 	
 	
@@ -416,7 +416,7 @@ class TreeNode: DObject
 	
 	
 	///
-	final @property void text(Dstring newText) // setter
+	final @property void text(string newText) // setter
 	{
 		ttext = newText;
 		
@@ -447,7 +447,7 @@ class TreeNode: DObject
 	}
 	
 	/// ditto
-	final @property Dstring text() // getter
+	final @property string text() // getter
 	{
 		return ttext;
 	}
@@ -597,7 +597,7 @@ class TreeNode: DObject
 	}
 	
 	
-	override Dstring toString()
+	override string toString()
 	{
 		return ttext;
 	}
@@ -613,7 +613,7 @@ class TreeNode: DObject
 		return 0 == stringICmp(ttext, node.ttext);
 	}
 	
-	Dequ opEquals(Dstring val)
+	Dequ opEquals(string val)
 	{
 		return 0 == stringICmp(ttext, val);
 	}
@@ -629,14 +629,14 @@ class TreeNode: DObject
 		return stringICmp(ttext, node.ttext);
 	}
 	
-	int opCmp(Dstring val)
+	int opCmp(string val)
 	{
 		return stringICmp(text, val);
 	}
 	
 	
 	private:
-	Dstring ttext;
+	string ttext;
 	TreeNode tparent;
 	TreeNodeCollection tchildren;
 	Object ttag;
@@ -720,7 +720,7 @@ class TreeNodeCollection
 		insert(i, node);
 	}
 	
-	void add(Dstring text)
+	void add(string text)
 	{
 		return add(new TreeNode(text));
 	}
@@ -747,9 +747,9 @@ class TreeNodeCollection
 		}
 	}
 	
-	void addRange(Dstring[] range)
+	void addRange(string[] range)
 	{
-		foreach(Dstring s; range)
+		foreach(string s; range)
 		{
 			add(s);
 		}
@@ -1964,7 +1964,7 @@ class TreeView: ControlSuperClass // docmain
 						
 						case TVN_ENDLABELEDITW:
 							{
-								Dstring label;
+								string label;
 								TV_DISPINFOW* nmdi;
 								nmdi = cast(TV_DISPINFOW*)nmh;
 								if(nmdi.item.pszText)
@@ -1997,7 +1997,7 @@ class TreeView: ControlSuperClass // docmain
 							}
 							else
 							{
-								Dstring label;
+								string label;
 								TV_DISPINFOA* nmdi;
 								nmdi = cast(TV_DISPINFOA*)nmh;
 								if(nmdi.item.pszText)

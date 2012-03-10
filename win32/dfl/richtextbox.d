@@ -28,21 +28,21 @@ private extern(Windows) void _initRichtextbox();
 class LinkClickedEventArgs: EventArgs
 {
 	///
-	this(Dstring linkText)
+	this(string linkText)
 	{
 		_linktxt = linkText;
 	}
 	
 	
 	///
-	final @property Dstring linkText() // getter
+	final @property string linkText() // getter
 	{
 		return _linktxt;
 	}
 	
 	
 	private:
-	Dstring _linktxt;
+	string _linktxt;
 }
 
 
@@ -121,13 +121,13 @@ class RichTextBox: TextBoxBase // docmain
 	alias TextBoxBase.cursor cursor; // Overload.
 	
 	
-	override @property Dstring selectedText() // getter
+	override @property string selectedText() // getter
 	{
 		if(created)
 		{
 			/+
 			uint len = selectionLength + 1;
-			Dstring result = new char[len];
+			string result = new char[len];
 			len = SendMessageA(handle, EM_GETSELTEXT, 0, cast(LPARAM)cast(char*)result);
 			assert(!result[len]);
 			return result[0 .. len];
@@ -775,14 +775,14 @@ class RichTextBox: TextBoxBase // docmain
 	
 	private struct _StreamStr
 	{
-		Dstring str;
+		string str;
 	}
 	
 	
 	// Note: RTF should only be ASCII so no conversions are necessary.
 	// TODO: verify this; I'm not certain.
 	
-	private void _streamIn(UINT fmt, Dstring str)
+	private void _streamIn(UINT fmt, string str)
 	in
 	{
 		assert(created);
@@ -803,7 +803,7 @@ class RichTextBox: TextBoxBase // docmain
 	}
 	
 	
-	private Dstring _streamOut(UINT fmt)
+	private string _streamOut(UINT fmt)
 	in
 	{
 		assert(created);
@@ -823,26 +823,26 @@ class RichTextBox: TextBoxBase // docmain
 	
 	
 	///
-	final @property void selectedRtf(Dstring rtf) // setter
+	final @property void selectedRtf(string rtf) // setter
 	{
 		_streamIn(SF_RTF | SFF_SELECTION, rtf);
 	}
 	
 	/// ditto
-	final @property Dstring selectedRtf() // getter
+	final @property string selectedRtf() // getter
 	{
 		return _streamOut(SF_RTF | SFF_SELECTION);
 	}
 	
 	
 	///
-	final @property void rtf(Dstring newRtf) // setter
+	final @property void rtf(string newRtf) // setter
 	{
 		_streamIn(SF_RTF, rtf);
 	}
 	
 	/// ditto
-	final @property Dstring rtf() // getter
+	final @property string rtf() // getter
 	{
 		return _streamOut(SF_RTF);
 	}
@@ -885,7 +885,7 @@ class RichTextBox: TextBoxBase // docmain
 		/+ // TextBoxBase.createHandle() does this.
 		if(!isHandleCreated)
 		{
-			Dstring txt;
+			string txt;
 			txt = wtext;
 			
 			super.createHandle();
@@ -920,7 +920,7 @@ class RichTextBox: TextBoxBase // docmain
 	}
 	
 	
-	private Dstring _getRange(LONG min, LONG max)
+	private string _getRange(LONG min, LONG max)
 	in
 	{
 		assert(created);
@@ -945,7 +945,7 @@ class RichTextBox: TextBoxBase // docmain
 		
 		//max = SendMessageA(handle, EM_GETTEXTRANGE, 0, cast(LPARAM)&tr);
 		max = dfl.internal.utf.sendMessage(handle, EM_GETTEXTRANGE, 0, cast(LPARAM)&tr);
-		Dstring result;
+		string result;
 		if(dfl.internal.utf.useUnicode)
 			result = fromUnicode(cast(wchar*)s.ptr, max);
 		else
@@ -1051,7 +1051,7 @@ private extern(Windows) DWORD _streamingOutStr(DWORD dwCookie, LPBYTE pbBuff, LO
 	RichTextBox._StreamStr* so;
 	so = cast(typeof(so))dwCookie;
 	
-	so.str ~= cast(Dstring)pbBuff[0 .. cb];
+	so.str ~= cast(string)pbBuff[0 .. cb];
 	*pcb = cb;
 	
 	return 0;
